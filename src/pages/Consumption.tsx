@@ -13,7 +13,7 @@ function Consumption() {
   const [consumption, setConsumption] = useState<ApiResponse[] | undefined>(undefined);
   const [timeRange, setTimeRange] = useState<TimeRange>({
     start_time: dayjs().startOf('day').format(),
-    end_time: dayjs().format(),
+    end_time: dayjs().startOf('hour').format(),
   });
 
   const isValidDate = (value: String) => value !== 'Invalid Date';
@@ -31,6 +31,7 @@ function Consumption() {
         }
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeRange]);
 
   return (
