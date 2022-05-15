@@ -1,11 +1,14 @@
+import { useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 
 function useBreakPoint() {
-  const matchesXs = useMediaQuery('(max-width: 576px)');
-  const matchesSm = useMediaQuery('(max-width: 768px)');
-  const matchesMd = useMediaQuery('(max-width: 992px)');
-  const matchesLg = useMediaQuery('(max-width: 1200px)');
-  const matchesXl = useMediaQuery('(max-width: 1400px)');
+  const { breakpoints } = useMantineTheme();
+  const matchesXs = useMediaQuery(`(max-width: ${breakpoints.xs}px)`);
+  const matchesSm = useMediaQuery(`(max-width: ${breakpoints.sm}px)`);
+  const matchesMd = useMediaQuery(`(max-width: ${breakpoints.md}px)`);
+  const matchesLg = useMediaQuery(`(max-width: ${breakpoints.lg}px)`);
+  const matchesXl = useMediaQuery(`(max-width: ${breakpoints.xl}px)`);
+
   return { matchesXs, matchesSm, matchesMd, matchesLg, matchesXl };
 }
 
