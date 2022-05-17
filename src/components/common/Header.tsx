@@ -1,10 +1,14 @@
-import { Anchor, Box, Header as MantineHeader, Image, Title } from '@mantine/core';
-import { Link, useNavigate } from 'react-router-dom';
+import { Anchor, Burger, Header as MantineHeader, Image, MediaQuery, Title } from '@mantine/core';
+import { Dispatch, SetStateAction } from 'react';
+import { Link } from 'react-router-dom';
 import lightbulb from './lightbulb.svg';
 
-function Header() {
-  const navigate = useNavigate();
+type HeaderProps = {
+  drawerOpen: boolean;
+  setDrawerOpen: Dispatch<SetStateAction<boolean>>;
+};
 
+function Header({ drawerOpen, setDrawerOpen }: HeaderProps) {
   return (
     <MantineHeader
       height={60}
@@ -15,6 +19,10 @@ function Header() {
         alignItems: 'center',
       })}
     >
+      <MediaQuery largerThan={'md'} styles={{ display: 'none' }}>
+        <Burger opened={drawerOpen} onClick={() => setDrawerOpen((prev: boolean) => !prev)} />
+      </MediaQuery>
+
       <Anchor
         component={Link}
         to={'/'}

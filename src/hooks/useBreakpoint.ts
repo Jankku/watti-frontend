@@ -1,7 +1,7 @@
 import { useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 
-function useBreakPoint() {
+function useBreakpoint() {
   const { breakpoints } = useMantineTheme();
   const matchesXs = useMediaQuery(`(max-width: ${breakpoints.xs}px)`);
   const matchesSm = useMediaQuery(`(max-width: ${breakpoints.sm}px)`);
@@ -12,4 +12,4 @@ function useBreakPoint() {
   return { matchesXs, matchesSm, matchesMd, matchesLg, matchesXl };
 }
 
-export default useBreakPoint;
+export default useBreakpoint;

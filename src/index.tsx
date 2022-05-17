@@ -9,8 +9,8 @@ import { NotificationsProvider } from '@mantine/notifications';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <MantineProvider>
-      <NotificationsProvider position="top-right" autoClose={3000} limit={3}>
+    <MantineProvider withNormalizeCSS>
+      <NotificationsProvider position="top-right" autoClose={2000} limit={3}>
         <BrowserRouter>
           <App />
         </BrowserRouter>
