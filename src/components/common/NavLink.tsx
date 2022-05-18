@@ -31,7 +31,7 @@ function NavLink({ label, path, icon }: NavLinkProps) {
         match
           ? {
               ...baseStyle,
-              backgroundColor: colors.orange[0],
+              backgroundColor: colors.orange[1],
             }
           : {
               ...baseStyle,

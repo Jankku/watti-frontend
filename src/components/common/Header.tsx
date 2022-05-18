@@ -20,7 +20,11 @@ function Header({ drawerOpen, setDrawerOpen }: HeaderProps) {
       })}
     >
       <MediaQuery largerThan={'md'} styles={{ display: 'none' }}>
-        <Burger opened={drawerOpen} onClick={() => setDrawerOpen((prev: boolean) => !prev)} />
+        <Burger
+          opened={drawerOpen}
+          onClick={() => setDrawerOpen((prev: boolean) => !prev)}
+          mr={'sm'}
+        />
       </MediaQuery>
 
       <Anchor
@@ -29,10 +33,11 @@ function Header({ drawerOpen, setDrawerOpen }: HeaderProps) {
         underline={false}
         sx={{ display: 'flex', alignItems: 'center' }}
       >
-        <Image src={lightbulb} width={32} height={32} />
+        <Image src={lightbulb} width={32} height={32} sx={{ transform: 'rotate(-30deg)' }} />
         <Title
-          order={2}
+          order={1}
           sx={(theme) => ({
+            textTransform: 'uppercase',
             color: theme.black,
             fontSize: '2em',
           })}
