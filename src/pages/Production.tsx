@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Box, Container, Title } from '@mantine/core';
 import ApiResponse from '../model/Response';
-import axios from '../axios';
 import TimeRange from '../model/TimeRange';
 import ElectricityChart from '../components/chart/ElectricityChart';
 import StartEndDatePicker from '../components/common/StartEndDatePicker';
-import dayjs from 'dayjs';
 import useNotification from '../hooks/useNotification';
+import useFingridApi from '../hooks/useFingridApi';
+import DefaultTimeRange from '../model/DefaultTimeRange';
 
 function Production() {
   const { errorNotification } = useNotification();
+  const { getProduction } = useFingridApi();
   const [production, setProduction] = useState<ApiResponse[] | undefined>(undefined);
-  const [timeRange, setTimeRange] = useState<TimeRange>({
-    start_time: dayjs().startOf('day').format(),
-    end_time: dayjs().startOf('hour').format(),
-  });
+  const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
 
   const isValidTime = (value: String) => value !== 'Invalid Date';
 
@@ -22,9 +20,7 @@ function Production() {
     (async () => {
       if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
         try {
-          const { data } = await axios.get<ApiResponse[]>('/variable/74/events/json', {
-            params: timeRange,
-          });
+          const data = await getProduction(timeRange);
           setProduction(data);
         } catch (error) {
           errorNotification(`Failed to fetch graph data`);
