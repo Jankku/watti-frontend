@@ -7,14 +7,13 @@ import StartEndDatePicker from '../components/common/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
 import useFingridApi from '../hooks/useFingridApi';
 import DefaultTimeRange from '../model/DefaultTimeRange';
+import { isValidTime } from '../utils/timerangeutils';
 
 function Production() {
   const { errorNotification } = useNotification();
   const { getProduction } = useFingridApi();
   const [production, setProduction] = useState<ApiResponse[] | undefined>(undefined);
   const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
-
-  const isValidTime = (value: String) => value !== 'Invalid Date';
 
   useEffect(() => {
     (async () => {

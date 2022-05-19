@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import ApiResponse from '../../model/Response';
+import ApiResponse from '../model/Response';
 
 dayjs.extend(localizedFormat);
 

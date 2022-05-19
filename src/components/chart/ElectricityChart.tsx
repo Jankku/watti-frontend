@@ -15,7 +15,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import { useEffect, useState } from 'react';
-import { ChartLabelArray, createChartLabels } from '../utils/chartutils';
+import { ChartLabelArray, createChartLabels } from '../../utils/chartutils';
 import { useMantineTheme } from '@mantine/core';
 
 dayjs.extend(localizedFormat);
