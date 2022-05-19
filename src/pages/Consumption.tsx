@@ -16,18 +16,18 @@ function Consumption() {
     end_time: dayjs().startOf('hour').format(),
   });
 
-  const isValidDate = (value: String) => value !== 'Invalid Date';
+  const isValidTime = (value: String) => value !== 'Invalid Date';
 
   useEffect(() => {
     (async () => {
-      if (isValidDate(timeRange.start_time) && isValidDate(timeRange.end_time)) {
+      if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
         try {
           const { data } = await axios.get<ApiResponse[]>('/variable/124/events/json', {
             params: timeRange,
           });
           setConsumption(data);
         } catch (error) {
-          errorNotification('Failed to fetch graph data.');
+          errorNotification(`Failed to fetch graph data`);
         }
       }
     })();
@@ -35,9 +35,9 @@ function Consumption() {
   }, [timeRange]);
 
   return (
-    <Container size={'md'}>
+    <Container size={'md'} p={0}>
       <Title align="center" order={1}>
-        Electricity Consumption in Finland
+        Electricity Consumption
       </Title>
 
       <Box
