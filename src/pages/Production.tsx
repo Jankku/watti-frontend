@@ -21,9 +21,11 @@ function Production() {
       if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
         try {
           const data = await getProduction(timeRange);
+          if (data.length === 0) return errorNotification('Failed to fetch graph data');
+
           setProduction(data);
         } catch (error) {
-          errorNotification(`Failed to fetch graph data`);
+          errorNotification('Failed to fetch graph data');
         }
       }
     })();

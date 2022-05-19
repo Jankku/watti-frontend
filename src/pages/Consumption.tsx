@@ -21,9 +21,11 @@ function Consumption() {
       if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
         try {
           const data = await getConsumption(timeRange);
+          if (data.length === 0) return errorNotification('Failed to fetch graph data');
+
           setConsumption(data);
         } catch (error) {
-          errorNotification(`Failed to fetch graph data`);
+          errorNotification('Failed to fetch graph data');
         }
       }
     })();
