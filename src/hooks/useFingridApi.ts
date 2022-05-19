@@ -1,5 +1,5 @@
 import axios from '../axios';
-import ApiResponse from '../model/Response';
+import ApiResponse from '../model/ApiResponse';
 import TimeRange from '../model/TimeRange';
 
 const getConsumption = async (timeRange: TimeRange) => {

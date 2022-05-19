@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Container, Title } from '@mantine/core';
-import ApiResponse from '../model/Response';
+import ApiResponse from '../model/ApiResponse';
 import TimeRange from '../model/TimeRange';
 import ElectricityChart from '../components/chart/ElectricityChart';
 import StartEndDatePicker from '../components/common/StartEndDatePicker';
