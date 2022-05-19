@@ -1,14 +1,19 @@
-import { Box, Drawer, MediaQuery, Navbar as MantineNavbar } from '@mantine/core';
+import { Drawer, MediaQuery, Navbar as MantineNavbar } from '@mantine/core';
 import NavLink, { NavLinkProps } from './NavLink';
-import { Home, Plug } from 'tabler-icons-react';
+import { ArrowBigUpLines, Home, Plug } from 'tabler-icons-react';
 import { Dispatch, SetStateAction } from 'react';
-import Footer from './Footer';
+import Footer from '../common/Footer';
 
 export const navLinks: NavLinkProps[] = [
   {
     label: 'Home',
     path: '/',
     icon: <Home size={16} />,
+  },
+  {
+    label: 'Production',
+    path: '/production',
+    icon: <ArrowBigUpLines size={16} />,
   },
   {
     label: 'Consumption',

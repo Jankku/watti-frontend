@@ -8,9 +8,9 @@ import StartEndDatePicker from '../components/common/StartEndDatePicker';
 import dayjs from 'dayjs';
 import useNotification from '../hooks/useNotification';
 
-function Consumption() {
+function Production() {
   const { errorNotification } = useNotification();
-  const [consumption, setConsumption] = useState<ApiResponse[] | undefined>(undefined);
+  const [production, setProduction] = useState<ApiResponse[] | undefined>(undefined);
   const [timeRange, setTimeRange] = useState<TimeRange>({
     start_time: dayjs().startOf('day').format(),
     end_time: dayjs().startOf('hour').format(),
@@ -22,10 +22,10 @@ function Consumption() {
     (async () => {
       if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
         try {
-          const { data } = await axios.get<ApiResponse[]>('/variable/124/events/json', {
+          const { data } = await axios.get<ApiResponse[]>('/variable/74/events/json', {
             params: timeRange,
           });
-          setConsumption(data);
+          setProduction(data);
         } catch (error) {
           errorNotification(`Failed to fetch graph data`);
         }
@@ -37,7 +37,7 @@ function Consumption() {
   return (
     <Container size={'md'} p={0}>
       <Title align="center" order={1}>
-        Electricity Consumption
+        Electricity Production
       </Title>
 
       <Box
@@ -49,9 +49,9 @@ function Consumption() {
       >
         <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
       </Box>
-      <ElectricityChart data={consumption} />
+      <ElectricityChart data={production} />
     </Container>
   );
 }
 
-export default Consumption;
+export default Production;
