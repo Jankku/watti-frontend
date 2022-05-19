@@ -52,10 +52,7 @@ function Navbar({ drawerOpen, setDrawerOpen }: NavbarProps) {
       <MediaQuery smallerThan={'md'} styles={{ display: 'none' }}>
         <MantineNavbar width={{ base: 250 }} p="xs">
           <MantineNavbar.Section grow>{navItems}</MantineNavbar.Section>
-
-          <MantineNavbar.Section sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Footer />
-          </MantineNavbar.Section>
+          <Footer />
         </MantineNavbar>
       </MediaQuery>
     </>
