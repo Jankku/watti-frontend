@@ -8,6 +8,7 @@ import useNotification from '../hooks/useNotification';
 import useFingridApi from '../hooks/useFingridApi';
 import DefaultTimeRange from '../model/DefaultTimeRange';
 import { isValidTime } from '../utils/timerangeutils';
+import StatsGroup from '../components/stats/StatsGroup';
 
 function Consumption() {
   const { errorNotification } = useNotification();
@@ -46,6 +47,7 @@ function Consumption() {
       >
         <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
       </Box>
+      <StatsGroup data={consumption} />
       <ElectricityChart data={consumption} />
     </Container>
   );
