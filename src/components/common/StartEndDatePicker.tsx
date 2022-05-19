@@ -3,6 +3,7 @@ import TimeRange from '../../model/TimeRange';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Box } from '@mantine/core';
+import useBreakpoint from '../../hooks/useBreakpoint';
 
 dayjs.extend(localizedFormat);
 
@@ -12,6 +13,7 @@ type StartEndDatePickerProps = {
 };
 
 function StartEndDatePicker({ timeRange, changeTimeRange }: StartEndDatePickerProps) {
+  const { matchesMd } = useBreakpoint();
   const startDate = dayjs(timeRange.start_time).toDate();
   const endDate = dayjs(timeRange.end_time).toDate();
   const timeRangeTuple: [Date, Date] = [startDate, endDate];
@@ -19,6 +21,7 @@ function StartEndDatePicker({ timeRange, changeTimeRange }: StartEndDatePickerPr
   return (
     <Box>
       <DateRangePicker
+        required
         label="Start - End"
         placeholder="Pick date"
         value={timeRangeTuple}
@@ -32,7 +35,7 @@ function StartEndDatePicker({ timeRange, changeTimeRange }: StartEndDatePickerPr
           });
         }}
         clearable={false}
-        required
+        dropdownType={matchesMd ? 'modal' : 'popover'}
       />
     </Box>
   );
