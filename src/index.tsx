@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import './fonts/montserrat/montserrat.css';
 import App from './App';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import { BrowserRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
@@ -20,3 +21,5 @@ root.render(
     </MantineProvider>
   </React.StrictMode>
 );
+
+serviceWorkerRegistration.register();

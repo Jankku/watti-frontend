@@ -9,6 +9,7 @@ import useFingridApi from '../hooks/useFingridApi';
 import DefaultTimeRange from '../model/DefaultTimeRange';
 import { isValidTime } from '../utils/timerangeutils';
 import StatsGroup from '../components/stats/StatsGroup';
+import PushNotificationHandler from '../components/pushnotification/PushNotificationHandler';
 
 function Production() {
   const { errorNotification } = useNotification();
@@ -37,14 +38,15 @@ function Production() {
       <Title align="center" order={1}>
         Electricity Production
       </Title>
-
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'flex-end',
+          alignItems: 'end',
           paddingTop: '1em',
         }}
       >
+        <PushNotificationHandler />
         <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
       </Box>
       <StatsGroup data={production} />

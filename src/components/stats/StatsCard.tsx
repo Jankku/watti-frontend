@@ -11,7 +11,6 @@ function StatsCard({ title, value, unit }: StatsCardProps) {
   return (
     <Card
       withBorder
-      shadow="xs"
       radius={'sm'}
       sx={{
         backgroundColor: colors.orange[1],
