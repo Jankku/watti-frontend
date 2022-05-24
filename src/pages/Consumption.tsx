@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Container, Title } from '@mantine/core';
-import ApiResponse from '../model/ApiResponse';
+import GraphResponse from '../model/GraphResponse';
 import TimeRange from '../model/TimeRange';
 import ElectricityChart from '../components/chart/ElectricityChart';
 import StartEndDatePicker from '../components/common/StartEndDatePicker';
@@ -9,11 +9,12 @@ import useFingridApi from '../hooks/useFingridApi';
 import DefaultTimeRange from '../model/DefaultTimeRange';
 import { isValidTime } from '../utils/timerangeutils';
 import StatsGroup from '../components/stats/StatsGroup';
+import PushNotificationHandler from '../components/pushnotification/PushNotificationHandler';
 
 function Consumption() {
   const { errorNotification } = useNotification();
   const { getConsumption } = useFingridApi();
-  const [consumption, setConsumption] = useState<ApiResponse[] | undefined>(undefined);
+  const [consumption, setConsumption] = useState<GraphResponse[] | undefined>(undefined);
   const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
 
   useEffect(() => {
@@ -42,9 +43,11 @@ function Consumption() {
         sx={{
           display: 'flex',
           justifyContent: 'flex-end',
+          alignItems: 'end',
           paddingTop: '1em',
         }}
       >
+        <PushNotificationHandler />
         <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
       </Box>
       <StatsGroup data={consumption} />

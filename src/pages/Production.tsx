@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Container, Title } from '@mantine/core';
-import ApiResponse from '../model/ApiResponse';
+import GraphResponse from '../model/GraphResponse';
 import TimeRange from '../model/TimeRange';
 import ElectricityChart from '../components/chart/ElectricityChart';
 import StartEndDatePicker from '../components/common/StartEndDatePicker';
@@ -14,7 +14,7 @@ import PushNotificationHandler from '../components/pushnotification/PushNotifica
 function Production() {
   const { errorNotification } = useNotification();
   const { getProduction } = useFingridApi();
-  const [production, setProduction] = useState<ApiResponse[] | undefined>(undefined);
+  const [production, setProduction] = useState<GraphResponse[] | undefined>(undefined);
   const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
 
   useEffect(() => {

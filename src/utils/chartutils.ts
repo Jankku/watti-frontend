@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import ApiResponse from '../model/ApiResponse';
+import GraphResponse from '../model/GraphResponse';
 
 dayjs.extend(localizedFormat);
 
@@ -8,16 +8,16 @@ type DateTimeLabel = [string, string];
 type DateLabel = string;
 export type ChartLabelArray = Array<DateLabel | DateTimeLabel>;
 
-function createChartLabels(data: ApiResponse[]): ChartLabelArray {
+function createChartLabels(data: GraphResponse[]): ChartLabelArray {
   const labelType = getChartLabelType(data);
   return labelType === 'date' ? createDateLabels(data) : createDateTimeLabels(data);
 }
 
-function createDateLabels(data: ApiResponse[]): ChartLabelArray {
+function createDateLabels(data: GraphResponse[]): ChartLabelArray {
   return data.map(({ start_time }) => dayjs(start_time).format('L'));
 }
 
-function createDateTimeLabels(data: ApiResponse[]): ChartLabelArray {
+function createDateTimeLabels(data: GraphResponse[]): ChartLabelArray {
   const startTimes = data.map(({ start_time }) => start_time);
   const labels: ChartLabelArray = [];
   let currentDay = '';
@@ -39,7 +39,7 @@ function createDateTimeLabels(data: ApiResponse[]): ChartLabelArray {
 
 type ChartLabelType = 'date' | 'dateTime';
 
-function getChartLabelType(data: ApiResponse[]): ChartLabelType {
+function getChartLabelType(data: GraphResponse[]): ChartLabelType {
   const startTimeUnix = data.map(({ start_time }) => dayjs(start_time).unix());
   const endTimeUnix = data.map(({ end_time }) => dayjs(end_time).unix());
   const earliestDate = dayjs(Math.min(...startTimeUnix), 'X');

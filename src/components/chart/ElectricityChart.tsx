@@ -9,7 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import ApiResponse from '../../model/ApiResponse';
+import GraphResponse from '../../model/GraphResponse';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -24,7 +24,7 @@ dayjs.extend(customParseFormat);
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 type ConsumptionChartProps = {
-  data: ApiResponse[] | undefined;
+  data: GraphResponse[] | undefined;
 };
 
 function ConsumptionChart({ data }: ConsumptionChartProps) {
