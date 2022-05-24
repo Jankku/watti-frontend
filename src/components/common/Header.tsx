@@ -1,6 +1,7 @@
 import { Anchor, Burger, Header as MantineHeader, Image, MediaQuery, Title } from '@mantine/core';
 import { Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
+import GridState from '../gridstate/GridState';
 import lightbulb from './lightbulb.svg';
 
 type HeaderProps = {
@@ -17,6 +18,7 @@ function Header({ drawerOpen, setDrawerOpen }: HeaderProps) {
         backgroundColor: theme.colors.yellow[7],
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between',
       })}
     >
       <MediaQuery largerThan={'md'} styles={{ display: 'none' }}>
@@ -45,6 +47,7 @@ function Header({ drawerOpen, setDrawerOpen }: HeaderProps) {
           Watti
         </Title>
       </Anchor>
+      <GridState />
     </MantineHeader>
   );
 }

@@ -16,8 +16,15 @@ const getProduction = async (timeRange: TimeRange) => {
   return data;
 };
 
+const getSystemState = async (timeRange: TimeRange) => {
+  const { data } = await axios.get<GraphResponse[]>('/proxy/v1/variable/209/events/json', {
+    params: timeRange,
+  });
+  return data;
+};
+
 function useFingridApi() {
-  return { getConsumption, getProduction };
+  return { getConsumption, getProduction, getSystemState };
 }
 
 export default useFingridApi;
