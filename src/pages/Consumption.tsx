@@ -3,7 +3,7 @@ import { Box, Container, Title } from '@mantine/core';
 import GraphResponse from '../model/GraphResponse';
 import TimeRange from '../model/TimeRange';
 import ElectricityChart from '../components/chart/ElectricityChart';
-import StartEndDatePicker from '../components/common/StartEndDatePicker';
+import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
 import useFingridApi from '../hooks/useFingridApi';
 import DefaultTimeRange from '../model/DefaultTimeRange';
