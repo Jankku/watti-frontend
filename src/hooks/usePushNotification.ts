@@ -59,23 +59,50 @@ function usePushNotification() {
     return null;
   };
 
-  const initPushNotifications = async () => {
+  const removePushSubscription = async (): Promise<boolean> => {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      const result = await subscription?.unsubscribe();
+
+      if (!result) return false;
+
+      const { status } = await axios.post('/api/subscription/remove', {
+        data: { subscription: subscription },
+      });
+
+      if (status === 200) return true;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return false;
+  };
+
+  const initPushNotifications = async (): Promise<boolean> => {
     if (!isSupported()) {
       console.error('Push notifications not supported');
-      return;
+      return false;
     }
 
     if (permission !== 'granted') {
       console.error('Notification permission denied.');
-      return;
+      return false;
     }
 
     await registerWorker();
     const sub = await getPushSubscription();
     setPushSubscription(sub);
+    return sub !== null;
   };
 
-  return { permission, askUserPermission, initPushNotifications };
+  return {
+    permission,
+    isSupported,
+    askUserPermission,
+    initPushNotifications,
+    removePushSubscription,
+  };
 }
 
 export default usePushNotification;

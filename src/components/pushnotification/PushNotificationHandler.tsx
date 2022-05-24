@@ -6,12 +6,26 @@ import PushNotificationButton from './PushNotificationButton';
 
 function PushNotificationHandler() {
   const [handled, setHandled] = useState(false);
-  const { permission, askUserPermission, initPushNotifications } = usePushNotification();
-  const { errorNotification } = useNotification();
+  const [notificationActive, setNotificationActive] = useState(false);
+  const { errorNotification, successNotification } = useNotification();
+  const {
+    permission,
+    isSupported,
+    askUserPermission,
+    initPushNotifications,
+    removePushSubscription,
+  } = usePushNotification();
 
-  const setup = async () => {
+  const setupSubscription = async () => {
     if (permission === 'granted') {
-      await initPushNotifications();
+      const result = await initPushNotifications();
+
+      if (result) {
+        successNotification('Notifications enabled.');
+        setNotificationActive(true);
+      } else {
+        errorNotification('Failed to enable notifications.');
+      }
     } else if (permission === 'default') {
       await askUserPermission();
     } else {
@@ -19,22 +33,38 @@ function PushNotificationHandler() {
     }
   };
 
+  const removeSubscription = async () => {
+    const result = await removePushSubscription();
+
+    if (result) {
+      successNotification('Notifications disabled.');
+      setNotificationActive(false);
+    } else {
+      errorNotification('Failed to disable notifications.');
+    }
+  };
+
   useEffect(() => {
     if (handled) {
-      setup();
+      setupSubscription();
     }
   }, [permission, handled]);
 
-  return (
+  return isSupported() ? (
     <>
       <PushNotificationButton
+        active={notificationActive}
         onClick={() => {
           setHandled(true);
-          setup();
+          if (notificationActive) {
+            removeSubscription();
+          } else {
+            setupSubscription();
+          }
         }}
       />
     </>
-  );
+  ) : null;
 }
 
 export default PushNotificationHandler;

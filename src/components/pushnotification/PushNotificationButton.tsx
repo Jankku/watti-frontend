@@ -1,16 +1,23 @@
 import { ThemeIcon, useMantineTheme } from '@mantine/core';
-import { Bell } from 'tabler-icons-react';
+import { Bell, BellRinging } from 'tabler-icons-react';
 
 type PushNotificationButtonProps = {
+  active: boolean;
   onClick: () => void;
 };
 
-function PushNotificationButton({ onClick }: PushNotificationButtonProps) {
+function PushNotificationButton({ active, onClick }: PushNotificationButtonProps) {
   const { colors } = useMantineTheme();
 
   return (
-    <ThemeIcon variant="filled" size={'lg'} color={colors.orange[5]} onClick={onClick} mr={16}>
-      <Bell />
+    <ThemeIcon
+      variant={active ? 'filled' : 'outline'}
+      size={'lg'}
+      color={colors.orange[5]}
+      onClick={onClick}
+      mr={16}
+    >
+      {active ? <BellRinging /> : <Bell />}
     </ThemeIcon>
   );
 }
