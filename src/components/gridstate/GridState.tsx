@@ -1,9 +1,10 @@
-import { Box, ColorSwatch, Title, Tooltip, useMantineTheme } from '@mantine/core';
+import { Box, ColorSwatch, Title, useMantineTheme } from '@mantine/core';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import useFingridApi from '../../hooks/useFingridApi';
 import GridStateItem from '../../model/GridStateItem';
 import TimeRange from '../../model/TimeRange';
+import GridstateTooltip from './GridStateTooltip';
 
 const possibleStates: GridStateItem[] = [
   {
@@ -43,12 +44,12 @@ const possibleStates: GridStateItem[] = [
     id: 6,
     name: 'Unavailable',
     color: 'gray',
-    description: "I have no idea what's the current state of the system.",
+    description: "I have no idea what's the current state.",
   },
 ];
 
 function GridState() {
-  const theme = useMantineTheme();
+  const { colors } = useMantineTheme();
   const { getSystemState } = useFingridApi();
   const [state, setState] = useState<GridStateItem>(possibleStates[5]);
 
@@ -71,14 +72,14 @@ function GridState() {
   }, []);
 
   return (
-    <Tooltip wrapLines width={200} withArrow label={state.description} closeDelay={1000}>
+    <GridstateTooltip description={state.description}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <ColorSwatch key={state.color} color={theme.colors[state.color][6]} size={20} />
+        <ColorSwatch key={state.color} color={colors[state.color][6]} size={20} />
         <Title order={5} px={4}>
           {state.name}
         </Title>
       </Box>
-    </Tooltip>
+    </GridstateTooltip>
   );
 }
 
