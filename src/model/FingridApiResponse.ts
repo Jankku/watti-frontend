@@ -1,7 +1,7 @@
-type GraphResponse = {
+type FingridApiResponse = {
   value: number;
   start_time: string;
   end_time: string;
 };
 
-export default GraphResponse;
+export default FingridApiResponse;

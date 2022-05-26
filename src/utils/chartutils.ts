@@ -1,23 +1,28 @@
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import GraphResponse from '../model/GraphResponse';
+import FingridApiResponse from '../model/FingridApiResponse';
+import ProductionByMethodResponse from '../model/ProductionByMethodResponse';
 
 dayjs.extend(localizedFormat);
+
+/**
+ * LINE CHART FUNCTIONS
+ */
 
 type DateTimeLabel = [string, string];
 type DateLabel = string;
 export type ChartLabelArray = Array<DateLabel | DateTimeLabel>;
 
-function createChartLabels(data: GraphResponse[]): ChartLabelArray {
-  const labelType = getChartLabelType(data);
+function createLineChartLabels(data: FingridApiResponse[]): ChartLabelArray {
+  const labelType = getLineChartLabels(data);
   return labelType === 'date' ? createDateLabels(data) : createDateTimeLabels(data);
 }
 
-function createDateLabels(data: GraphResponse[]): ChartLabelArray {
+function createDateLabels(data: FingridApiResponse[]): ChartLabelArray {
   return data.map(({ start_time }) => dayjs(start_time).format('L'));
 }
 
-function createDateTimeLabels(data: GraphResponse[]): ChartLabelArray {
+function createDateTimeLabels(data: FingridApiResponse[]): ChartLabelArray {
   const startTimes = data.map(({ start_time }) => start_time);
   const labels: ChartLabelArray = [];
   let currentDay = '';
@@ -39,7 +44,7 @@ function createDateTimeLabels(data: GraphResponse[]): ChartLabelArray {
 
 type ChartLabelType = 'date' | 'dateTime';
 
-function getChartLabelType(data: GraphResponse[]): ChartLabelType {
+function getLineChartLabels(data: FingridApiResponse[]): ChartLabelType {
   const startTimeUnix = data.map(({ start_time }) => dayjs(start_time).unix());
   const endTimeUnix = data.map(({ end_time }) => dayjs(end_time).unix());
   const earliestDate = dayjs(Math.min(...startTimeUnix), 'X');
@@ -49,4 +54,37 @@ function getChartLabelType(data: GraphResponse[]): ChartLabelType {
   return dateDiff > 5 ? 'date' : 'dateTime';
 }
 
-export { createChartLabels };
+/**
+ * PIE CHART FUNCTIONS
+ */
+
+type ProductionByMethodConverted = {
+  nuclear: number[];
+  hydro: number[];
+  wind: number[];
+  solar: number[];
+};
+
+const createPieChartValues = (data: ProductionByMethodResponse): number[] => {
+  const results: ProductionByMethodConverted = {
+    nuclear: [],
+    hydro: [],
+    wind: [],
+    solar: [],
+  };
+
+  for (const [key, response] of Object.entries(data)) {
+    const values = response.map(({ value }) => value);
+    const valueSum = values.reduce((prev, next) => prev + next, 0);
+    results[key as keyof ProductionByMethodResponse].push(valueSum);
+  }
+
+  const flattenedResults = Object.values(results).flatMap((value) => value);
+
+  return flattenedResults;
+};
+
+const createPieChartLabels = (data: ProductionByMethodResponse) =>
+  Object.keys(data).map((label) => label.charAt(0).toUpperCase() + label.slice(1));
+
+export { createLineChartLabels, createPieChartValues, createPieChartLabels };

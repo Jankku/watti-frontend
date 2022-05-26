@@ -1,6 +1,6 @@
 import { SimpleGrid } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import GraphResponse from '../../model/GraphResponse';
+import FingridApiResponse from '../../model/FingridApiResponse';
 import { calcAverage } from '../../utils/mathutils';
 import StatsCard from './StatsCard';
 
@@ -11,7 +11,7 @@ type Stats = {
 };
 
 type StatsGroupProps = {
-  data: GraphResponse[] | undefined;
+  data: FingridApiResponse[] | undefined;
 };
 
 function StatsGroup({ data }: StatsGroupProps) {

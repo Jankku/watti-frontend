@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.0.3",
     "axios": "^0.27.2",
     "chart.js": "^3.7.1",
+    "chartjs-plugin-datalabels": "^2.0.0",
     "dayjs": "^1.11.2",
     "react": "^18.1.0",
     "react-chartjs-2": "^4.1.0",

@@ -9,13 +9,13 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import GraphResponse from '../../model/GraphResponse';
+import FingridApiResponse from '../../model/FingridApiResponse';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import { useEffect, useState } from 'react';
-import { ChartLabelArray, createChartLabels } from '../../utils/chartutils';
+import { ChartLabelArray, createLineChartLabels } from '../../utils/chartutils';
 import { useMantineTheme } from '@mantine/core';
 
 dayjs.extend(localizedFormat);
@@ -24,7 +24,7 @@ dayjs.extend(customParseFormat);
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 type ConsumptionChartProps = {
-  data: GraphResponse[] | undefined;
+  data: FingridApiResponse[] | undefined;
 };
 
 function ConsumptionChart({ data }: ConsumptionChartProps) {
@@ -36,7 +36,7 @@ function ConsumptionChart({ data }: ConsumptionChartProps) {
   useEffect(() => {
     if (!data) return;
 
-    const chartLabels = createChartLabels(data);
+    const chartLabels = createLineChartLabels(data);
     const chartValues = data.map(({ value }) => value);
     setLabels(chartLabels);
     setValues(chartValues);
@@ -44,6 +44,7 @@ function ConsumptionChart({ data }: ConsumptionChartProps) {
 
   return (
     <Line
+      plugins={[CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend]}
       data={{
         labels: labels,
         datasets: [
@@ -57,10 +58,25 @@ function ConsumptionChart({ data }: ConsumptionChartProps) {
       }}
       options={{
         responsive: true,
-        aspectRatio: matchesXs ? 1 : 2,
+        scales: {
+          x: {
+            ticks: {},
+          },
+          y: {
+            beginAtZero: true,
+            suggestedMax: Math.max(...values) + 1000,
+          },
+        },
+        aspectRatio: matchesXs ? 1 : 2.5,
         plugins: {
           legend: {
             position: 'bottom' as const,
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => `${new Intl.NumberFormat('en-US').format(context.raw as number)}`,
+              afterLabel: () => 'Mwh/h',
+            },
           },
         },
       }}
