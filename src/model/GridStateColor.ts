@@ -1,3 +1,3 @@
-type GridStateColor = 'green' | 'yellow' | 'red' | 'black' | 'blue';
+type GridStateColor = 'green' | 'yellow' | 'red' | 'dark' | 'blue' | 'gray';
 
 export default GridStateColor;

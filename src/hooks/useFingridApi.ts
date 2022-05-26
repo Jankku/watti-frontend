@@ -5,7 +5,7 @@ import TimeRange from '../model/TimeRange';
 
 const get = async (variableId: number, timeRange: TimeRange) => {
   const { data } = await axios.get<FingridApiResponse[]>(
-    `/proxy/v1/variable/${variableId}/events/json`,
+    `/fingrid/v1/variable/${variableId}/events/json`,
     {
       params: timeRange,
     }
