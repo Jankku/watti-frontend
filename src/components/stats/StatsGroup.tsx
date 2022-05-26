@@ -18,7 +18,7 @@ function StatsGroup({ data }: StatsGroupProps) {
   const [stats, setStats] = useState<Stats>({ min: 0, max: 0, average: 0 });
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || data.length === 0) return;
 
     const values = data.map(({ value }) => value);
     const min = Math.min(...values);
@@ -34,9 +34,9 @@ function StatsGroup({ data }: StatsGroupProps) {
 
   return (
     <SimpleGrid my={40} cols={3}>
-      <StatsCard title="Min" value={stats.min} unit={'MWh/h'} />
-      <StatsCard title="Average" value={stats.average} unit={'MWh/h'} />
-      <StatsCard title="Max" value={stats.max} unit={'MWh/h'} />
+      <StatsCard title="Min" value={stats.min ?? 0} unit={'MWh/h'} />
+      <StatsCard title="Average" value={stats.average ?? 0} unit={'MWh/h'} />
+      <StatsCard title="Max" value={stats.max ?? 0} unit={'MWh/h'} />
     </SimpleGrid>
   );
 }
