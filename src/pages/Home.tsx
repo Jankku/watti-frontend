@@ -1,43 +1,43 @@
-import { Box, Card, Container, Image, Text, Title, useMantineTheme } from '@mantine/core';
-import lightbulb from '../components/common/lightbulb.svg';
+import { Anchor, Button, Card, Container, SimpleGrid, Text, useMantineTheme } from '@mantine/core';
+import TitleCard from '../components/common/TitleCard';
+import Branding from '../components/home/Branding';
 import useBreakpoint from '../hooks/useBreakpoint';
 
 function Home() {
-  const { colors } = useMantineTheme();
-  const { matchesSm } = useBreakpoint();
-
+  const { spacing } = useMantineTheme();
+  const { matchesXs } = useBreakpoint();
   return (
-    <Container size={'sm'} pt={'lg'}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: matchesSm ? 'column' : 'row',
-          padding: '3em 0em',
-        }}
-      >
-        <Image
-          src={lightbulb}
-          width={matchesSm ? '8em' : undefined}
-          sx={{ transform: 'rotate(-30deg)' }}
-        />
-        <Box>
-          <Title order={1} align={'center'} sx={{ fontSize: '5em', textTransform: 'uppercase' }}>
-            Watti
-          </Title>
-          <Text weight={500} align={'center'} size={'lg'} sx={{ fontFamily: 'montserrat' }}>
-            Finnish electricity dashboard
+    <Container size={'sm'}>
+      <Branding />
+      <SimpleGrid cols={matchesXs ? 1 : 2} spacing={matchesXs ? spacing.xl : spacing.md}>
+        <TitleCard title="About">
+          <Text size="md" pt={spacing.xs}>
+            Track electricity production and consumption. Data is provided by Fingrid.
           </Text>
-        </Box>
-      </Box>
-      <Card
-        sx={{
-          backgroundColor: colors.orange[4],
-          lineHeight: 1.0,
-        }}
-      >
-        <Text>Track electricity production and consumption. Data is provided by Fingrid.</Text>
-      </Card>
+        </TitleCard>
+
+        <TitleCard title="Source code">
+          <Card.Section
+            pt={spacing.xs}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              rowGap: spacing.sm,
+            }}
+          >
+            <Anchor mt={4} href="https://github.com/Jankku/watti-backend" target="_blank">
+              <Button fullWidth size="md">
+                Backend
+              </Button>
+            </Anchor>
+            <Anchor mt={4} href="https://github.com/Jankku/watti-frontend" target="_blank">
+              <Button fullWidth size="md">
+                Frontend
+              </Button>
+            </Anchor>
+          </Card.Section>
+        </TitleCard>
+      </SimpleGrid>
     </Container>
   );
 }
