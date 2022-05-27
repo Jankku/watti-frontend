@@ -17,6 +17,7 @@ import useBreakpoint from '../../hooks/useBreakpoint';
 import { useEffect, useState } from 'react';
 import { ChartLabelArray, createLineChartLabels } from '../../utils/chartutils';
 import { useMantineTheme } from '@mantine/core';
+import { formatNumber } from '../../utils/numberutils';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(customParseFormat);
@@ -74,7 +75,7 @@ function ConsumptionChart({ data }: ConsumptionChartProps) {
           },
           tooltip: {
             callbacks: {
-              label: (context) => `${new Intl.NumberFormat('en-US').format(context.raw as number)}`,
+              label: (context) => `${formatNumber(context.raw as number)}`,
               afterLabel: () => 'Mwh/h',
             },
           },

@@ -15,7 +15,11 @@ const get = async (variableId: number, timeRange: TimeRange) => {
 
 const getTotalConsumption = async (timeRange: TimeRange) => await get(124, timeRange);
 
+const getTotalConsumptionEmissions = async (timeRange: TimeRange) => await get(265, timeRange);
+
 const getTotalProduction = async (timeRange: TimeRange) => await get(74, timeRange);
+
+const getTotalProductionEmissions = async (timeRange: TimeRange) => await get(266, timeRange);
 
 const getNuclearProduction = async (timeRange: TimeRange) => await get(188, timeRange);
 
@@ -46,7 +50,14 @@ const getTotalProductionByMethods = async (timeRange: TimeRange) => {
 };
 
 function useFingridApi() {
-  return { getTotalConsumption, getTotalProductionByMethods, getTotalProduction, getSystemState };
+  return {
+    getTotalConsumption,
+    getTotalConsumptionEmissions,
+    getTotalProductionByMethods,
+    getTotalProduction,
+    getTotalProductionEmissions,
+    getSystemState,
+  };
 }
 
 export default useFingridApi;

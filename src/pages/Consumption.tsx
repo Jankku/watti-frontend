@@ -14,7 +14,8 @@ import ChartCard from '../components/chart/ChartCard';
 
 function Consumption() {
   const { errorNotification } = useNotification();
-  const { getTotalConsumption } = useFingridApi();
+  const { getTotalConsumption, getTotalConsumptionEmissions } = useFingridApi();
+  const [emissions, setEmissions] = useState<FingridApiResponse[]>([]);
   const [consumption, setConsumption] = useState<FingridApiResponse[]>([]);
   const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
 
@@ -23,12 +24,33 @@ function Consumption() {
       if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
         try {
           const consumption = await getTotalConsumption(timeRange);
-          if (consumption.length === 0)
-            return errorNotification('Failed to fetch graph consumption');
+
+          if (consumption.length === 0) {
+            return errorNotification('Failed to fetch graph data');
+          }
 
           setConsumption(consumption);
         } catch (error) {
-          errorNotification('Failed to fetch graph consumption');
+          errorNotification('Failed to fetch graph data');
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeRange]);
+
+  useEffect(() => {
+    (async () => {
+      if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
+        try {
+          const consumptionEmissions = await getTotalConsumptionEmissions(timeRange);
+
+          if (consumptionEmissions.length === 0) {
+            return errorNotification('Failed to fetch emission data');
+          }
+
+          setEmissions(consumptionEmissions);
+        } catch (error) {
+          errorNotification('Failed to fetch emission data');
         }
       }
     })();
@@ -52,7 +74,7 @@ function Consumption() {
         <PushNotificationHandler />
         <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
       </Box>
-      <StatsGroup data={consumption} />
+      <StatsGroup data={consumption} emissions={emissions} />
       <ChartCard title="Total consumption">
         <ElectricityLineChart data={consumption} />
       </ChartCard>

@@ -22,10 +22,10 @@ const formatWatts = (watts: number) => {
     divide = 1e3;
   }
 
-  const options = {
+  const numberFormat = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 2,
-  };
-  return `${new Intl.NumberFormat('en-US', options).format(watts / divide)} ${unit}`;
+  });
+  return `${numberFormat.format(watts / divide)} ${unit}`;
 };
 
 export { formatWatts };

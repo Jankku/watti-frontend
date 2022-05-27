@@ -16,7 +16,9 @@ import ChartCard from '../components/chart/ChartCard';
 
 function Production() {
   const { errorNotification } = useNotification();
-  const { getTotalProduction, getTotalProductionByMethods } = useFingridApi();
+  const { getTotalProduction, getTotalProductionByMethods, getTotalProductionEmissions } =
+    useFingridApi();
+  const [emissions, setEmissions] = useState<FingridApiResponse[]>([]);
   const [production, setProduction] = useState<FingridApiResponse[]>([]);
   const [productionByMethod, setProductionByMethod] = useState<ProductionByMethodResponse>(
     {} as ProductionByMethodResponse
@@ -44,6 +46,25 @@ function Production() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeRange]);
 
+  useEffect(() => {
+    (async () => {
+      if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
+        try {
+          const productionEmissions = await getTotalProductionEmissions(timeRange);
+
+          if (productionEmissions.length === 0) {
+            return errorNotification('Failed to fetch emission data');
+          }
+
+          setEmissions(productionEmissions);
+        } catch (error) {
+          errorNotification('Failed to fetch emission data');
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeRange]);
+
   return (
     <Container size={'lg'} p={0}>
       <Title align="center" order={1}>
@@ -60,7 +81,7 @@ function Production() {
         <PushNotificationHandler />
         <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
       </Box>
-      <StatsGroup data={production} />
+      <StatsGroup data={production} emissions={emissions} />
       <ChartCard title="Total production">
         <ElectricityLineChart data={production} />
       </ChartCard>
