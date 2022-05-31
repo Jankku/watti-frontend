@@ -7,7 +7,7 @@ import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
 import useFingridApi from '../hooks/useFingridApi';
 import DefaultTimeRange from '../model/DefaultTimeRange';
-import { isValidTime } from '../utils/timerangeutils';
+import { isValidTimeRange } from '../utils/timerangeutils';
 import StatsGroup from '../components/stats/StatsGroup';
 import PushNotificationHandler from '../components/pushnotification/PushNotificationHandler';
 import ElectricityPieChart from '../components/chart/ElectricityPieChart';
@@ -27,7 +27,7 @@ function Production() {
 
   useEffect(() => {
     (async () => {
-      if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
+      if (isValidTimeRange(timeRange)) {
         try {
           const production = await getTotalProduction(timeRange);
           const productionByMethod = await getTotalProductionByMethods(timeRange);
@@ -48,7 +48,7 @@ function Production() {
 
   useEffect(() => {
     (async () => {
-      if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
+      if (isValidTimeRange(timeRange)) {
         try {
           const productionEmissions = await getTotalProductionEmissions(timeRange);
 

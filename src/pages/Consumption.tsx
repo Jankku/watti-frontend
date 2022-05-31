@@ -7,7 +7,7 @@ import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
 import useFingridApi from '../hooks/useFingridApi';
 import DefaultTimeRange from '../model/DefaultTimeRange';
-import { isValidTime } from '../utils/timerangeutils';
+import { isValidTimeRange } from '../utils/timerangeutils';
 import StatsGroup from '../components/stats/StatsGroup';
 import PushNotificationHandler from '../components/pushnotification/PushNotificationHandler';
 import ChartCard from '../components/chart/ChartCard';
@@ -21,7 +21,7 @@ function Consumption() {
 
   useEffect(() => {
     (async () => {
-      if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
+      if (isValidTimeRange(timeRange)) {
         try {
           const consumption = await getTotalConsumption(timeRange);
 
@@ -40,7 +40,7 @@ function Consumption() {
 
   useEffect(() => {
     (async () => {
-      if (isValidTime(timeRange.start_time) && isValidTime(timeRange.end_time)) {
+      if (isValidTimeRange(timeRange)) {
         try {
           const consumptionEmissions = await getTotalConsumptionEmissions(timeRange);
 
