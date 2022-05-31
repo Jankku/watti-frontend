@@ -2,7 +2,7 @@ import { SimpleGrid } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import FingridApiResponse from '../../model/FingridApiResponse';
-import { calcAverage, calcMax, calcMin, calcSum, formatNumber } from '../../utils/numberutils';
+import { calcAverage, calcMax, calcMin, formatNumber } from '../../utils/numberutils';
 import StatsCard from './StatsCard';
 
 type Stats = {

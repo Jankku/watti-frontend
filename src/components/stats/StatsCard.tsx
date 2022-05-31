@@ -1,4 +1,4 @@
-import { Text } from '@mantine/core';
+import { Text, useMantineTheme } from '@mantine/core';
 import TitleCard from '../common/TitleCard';
 
 type StatsCardProps = {
@@ -8,8 +8,9 @@ type StatsCardProps = {
 };
 
 function StatsCard({ title, value, unit }: StatsCardProps) {
+  const { colors } = useMantineTheme();
   return (
-    <TitleCard title={title}>
+    <TitleCard title={title} bgColor={colors.orange[1]}>
       <Text weight={500}>
         {value ?? '-'} {unit}
       </Text>
