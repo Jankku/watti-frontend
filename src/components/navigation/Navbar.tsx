@@ -1,24 +1,30 @@
 import { Drawer, MediaQuery, Navbar as MantineNavbar } from '@mantine/core';
 import NavLink, { NavLinkProps } from './NavLink';
-import { ArrowBigUpLines, Home, Plug } from 'tabler-icons-react';
+import { ArrowBigUpLines, ArrowsDownUp, Home, Plug } from 'tabler-icons-react';
 import { Dispatch, SetStateAction } from 'react';
 import Footer from '../common/Footer';
 
+const navIconSize = 16;
 export const navLinks: NavLinkProps[] = [
   {
     label: 'Home',
     path: '/',
-    icon: <Home size={16} />,
+    icon: <Home size={navIconSize} />,
   },
   {
     label: 'Production',
     path: '/production',
-    icon: <ArrowBigUpLines size={16} />,
+    icon: <ArrowBigUpLines size={navIconSize} />,
   },
   {
     label: 'Consumption',
     path: '/consumption',
-    icon: <Plug size={16} />,
+    icon: <Plug size={navIconSize} />,
+  },
+  {
+    label: 'Transmission',
+    path: '/transmission',
+    icon: <ArrowsDownUp size={navIconSize} />,
   },
 ];
 

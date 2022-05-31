@@ -3,6 +3,7 @@ import Layout from './components/common/Layout';
 import Home from './pages/Home';
 import Consumption from './pages/Consumption';
 import Production from './pages/Production';
+import Transmission from './pages/Transmission';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/consumption" element={<Consumption />} />
           <Route path="/production" element={<Production />} />
+          <Route path="/transmission" element={<Transmission />} />
         </Route>
       </Routes>
     </div>

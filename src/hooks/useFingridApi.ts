@@ -2,6 +2,7 @@ import axios from '../axios';
 import FingridApiResponse from '../model/FingridApiResponse';
 import ProductionByMethodResponse from '../model/ProductionByMethodResponse';
 import TimeRange from '../model/TimeRange';
+import TransmissionBetweenCountriesResponse from '../model/TransmissionBetweenCountriesResponse';
 
 const get = async (variableId: number, timeRange: TimeRange) => {
   const { data } = await axios.get<FingridApiResponse[]>(
@@ -13,30 +14,20 @@ const get = async (variableId: number, timeRange: TimeRange) => {
   return data;
 };
 
-const getTotalConsumption = async (timeRange: TimeRange) => await get(124, timeRange);
+const getNetImportExport = async (timeRange: TimeRange) => await get(194, timeRange);
 
+const getTotalConsumption = async (timeRange: TimeRange) => await get(124, timeRange);
 const getTotalConsumptionEmissions = async (timeRange: TimeRange) => await get(265, timeRange);
 
+const getProductionSurplusDeficit = async (timeRange: TimeRange) => await get(198, timeRange);
 const getTotalProduction = async (timeRange: TimeRange) => await get(74, timeRange);
-
 const getTotalProductionEmissions = async (timeRange: TimeRange) => await get(266, timeRange);
-
-const getNuclearProduction = async (timeRange: TimeRange) => await get(188, timeRange);
-
-const getHydroProduction = async (timeRange: TimeRange) => await get(191, timeRange);
-
-const getWindProduction = async (timeRange: TimeRange) => await get(181, timeRange);
-
-const getSolarProduction = async (timeRange: TimeRange) => await get(248, timeRange);
-
-const getSystemState = async (timeRange: TimeRange) => await get(209, timeRange);
-
 const getTotalProductionByMethods = async (timeRange: TimeRange) => {
   const responses = await Promise.all([
-    getNuclearProduction(timeRange),
-    getHydroProduction(timeRange),
-    getWindProduction(timeRange),
-    getSolarProduction(timeRange),
+    get(188, timeRange), // Nuclear
+    get(191, timeRange), // Hydro
+    get(181, timeRange), // Wind
+    get(248, timeRange), // Solar
   ]);
 
   const response: ProductionByMethodResponse = {
@@ -49,13 +40,36 @@ const getTotalProductionByMethods = async (timeRange: TimeRange) => {
   return response;
 };
 
+const getSystemState = async (timeRange: TimeRange) => await get(209, timeRange);
+
+const getTransmissionBetweenCountries = async (timeRange: TimeRange) => {
+  const responses = await Promise.all([
+    get(61, timeRange), // Central Sweden
+    get(60, timeRange), // Northern Sweden
+    get(57, timeRange), // Norway
+    get(55, timeRange), // Estonia
+    get(58, timeRange), // Russia
+  ]);
+
+  const response: TransmissionBetweenCountriesResponse = {
+    centralSweden: responses[0],
+    northernSweden: responses[1],
+    norway: responses[2],
+    estonia: responses[3],
+    russia: responses[4],
+  };
+
+  return response;
+};
+
 function useFingridApi() {
   return {
+    getTransmissionBetweenCountries,
+    getTotalProduction,
+    getTotalProductionByMethods,
+    getTotalProductionEmissions,
     getTotalConsumption,
     getTotalConsumptionEmissions,
-    getTotalProductionByMethods,
-    getTotalProduction,
-    getTotalProductionEmissions,
     getSystemState,
   };
 }
