@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import useFingridApi from '../../hooks/useFingridApi';
 import GridStateItem from '../../model/GridStateItem';
 import TimeRange from '../../model/TimeRange';
-import GridstateTooltip from './GridStateTooltip';
+import CustomTooltip from '../common/CustomTooltip';
 
 const possibleStates: GridStateItem[] = [
   {
@@ -72,14 +72,14 @@ function GridState() {
   }, []);
 
   return (
-    <GridstateTooltip description={state.description}>
+    <CustomTooltip title="Grid status" label={state.description} width={150} position={'left'}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <ColorSwatch key={state.color} color={colors[state.color][6]} size={20} />
         <Title order={5} px={4}>
           {state.name}
         </Title>
       </Box>
-    </GridstateTooltip>
+    </CustomTooltip>
   );
 }
 
