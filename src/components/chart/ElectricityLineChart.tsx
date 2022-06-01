@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { ChartLabelArray, createLineChartLabels } from '../../utils/chartutils';
 import { useMantineTheme } from '@mantine/core';
 import { formatNumber } from '../../utils/numberutils';
+import { mapApiResponseToValues } from '../../utils/responseutils';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(customParseFormat);
@@ -38,7 +39,7 @@ function ConsumptionChart({ data }: ConsumptionChartProps) {
     if (!data) return;
 
     const chartLabels = createLineChartLabels(data);
-    const chartValues = data.map(({ value }) => value);
+    const chartValues = mapApiResponseToValues(data);
     setLabels(chartLabels);
     setValues(chartValues);
   }, [data]);

@@ -15,6 +15,7 @@ import CustomTooltip from '../components/common/CustomTooltip';
 import DomesticTransmissionArrows, {
   DomesticTransmissionDirections,
 } from '../components/transmission/DomesticTransmissionArrows';
+import { mapApiResponseToValues } from '../utils/responseutils';
 
 const transmissionCountries = {
   centralSweden: 'Central Sweden',
@@ -56,7 +57,7 @@ const mapResponseToCountryValues = (response: TransmissionBetweenCountriesRespon
   };
 
   Object.entries(response).forEach((country) => {
-    const values = country[1].map(({ value }) => value);
+    const values = mapApiResponseToValues(country[1]);
     countryValues[country[0] as keyof TransmissionBetweenCountriesResponse] = values;
   });
 
@@ -92,7 +93,7 @@ const getTableRowCells = (country: [string, CountryTableData]) =>
 const getDomesticDirection = (data: FingridApiResponse[]): DomesticTransmissionDirections => {
   if (data.length === 0) return null;
 
-  const values = data.map(({ value }) => value);
+  const values = mapApiResponseToValues(data);
   const average = calcAverage(values);
   return average > 0 ? 'south' : 'north';
 };

@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import FingridApiResponse from '../model/FingridApiResponse';
 import ProductionByMethodResponse from '../model/ProductionByMethodResponse';
+import { mapApiResponseToValues } from './responseutils';
 
 dayjs.extend(localizedFormat);
 
@@ -74,7 +75,7 @@ const createPieChartValues = (data: ProductionByMethodResponse): number[] => {
   };
 
   for (const [key, response] of Object.entries(data)) {
-    const values = response.map(({ value }) => value);
+    const values = mapApiResponseToValues(response);
     const valueSum = values.reduce((prev, next) => prev + next, 0);
     results[key as keyof ProductionByMethodResponse].push(valueSum);
   }

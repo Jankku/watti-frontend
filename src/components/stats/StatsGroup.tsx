@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import FingridApiResponse from '../../model/FingridApiResponse';
 import { calcAverage, calcMax, calcMin, formatNumber } from '../../utils/numberutils';
+import { mapApiResponseToValues } from '../../utils/responseutils';
 import StatsCard from './StatsCard';
 
 type Stats = {
@@ -24,7 +25,7 @@ function StatsGroup({ data, emissions }: StatsGroupProps) {
   useEffect(() => {
     if (!data || data.length === 0) return;
 
-    const values = data.map(({ value }) => value);
+    const values = mapApiResponseToValues(data);
     const min = calcMin(values);
     const max = calcMax(values);
     const average = calcAverage(values);
@@ -37,7 +38,7 @@ function StatsGroup({ data, emissions }: StatsGroupProps) {
   useEffect(() => {
     if (!emissions || emissions.length === 0) return;
 
-    const emissionValues = emissions.map(({ value }) => value);
+    const emissionValues = mapApiResponseToValues(emissions);
     const avgEmissions = calcAverage(emissionValues);
 
     setStats((stats) => {
