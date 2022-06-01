@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Container, SimpleGrid, Table, Title } from '@mantine/core';
+import { Box, Container, List, SimpleGrid, Table, Title, useMantineTheme } from '@mantine/core';
 import TimeRange from '../model/TimeRange';
 import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
@@ -10,6 +10,11 @@ import TransmissionBetweenCountriesResponse from '../model/TransmissionBetweenCo
 import TitleCard from '../components/common/TitleCard';
 import { calcAverage, calcMax, calcMin, formatNumber } from '../utils/numberutils';
 import useBreakpoint from '../hooks/useBreakpoint';
+import FingridApiResponse from '../model/FingridApiResponse';
+import CustomTooltip from '../components/common/CustomTooltip';
+import DomesticTransmissionArrows, {
+  DomesticTransmissionDirections,
+} from '../components/transmission/DomesticTransmissionArrows';
 
 const transmissionCountries = {
   centralSweden: 'Central Sweden',
@@ -77,11 +82,28 @@ const mapValuesToTableData = (values: TransmissionBetweenCountriesValues) => {
   return tableData;
 };
 
+const getTableRowCountry = (country: [string, CountryTableData]) => (
+  <td>{transmissionCountries[country[0] as keyof TransmissionBetweenCountriesValues]}</td>
+);
+
+const getTableRowCells = (country: [string, CountryTableData]) =>
+  Object.values(country[1]).map((num, index) => <td key={index}>{formatNumber(num)}</td>);
+
+const getDomesticDirection = (data: FingridApiResponse[]): DomesticTransmissionDirections => {
+  if (data.length === 0) return null;
+
+  const values = data.map(({ value }) => value);
+  const average = calcAverage(values);
+  return average > 0 ? 'south' : 'north';
+};
+
 function Transmission() {
+  const { white } = useMantineTheme();
   const { errorNotification } = useNotification();
-  const { getTransmissionBetweenCountries } = useFingridApi();
+  const { getTransmissionBetweenCountries, getDomesticTransmission } = useFingridApi();
   const { matchesXs } = useBreakpoint();
   const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
+  const [domesticTransmission, setDomesticTransmission] = useState<FingridApiResponse[]>([]);
   const [transmissionByCountries, setTransmissionByCountries] =
     useState<TransmissionBetweenCountriesTableData>({
       centralSweden: { min: 0, average: 0, max: 0 },
@@ -95,13 +117,16 @@ function Transmission() {
     (async () => {
       if (isValidTimeRange(timeRange)) {
         try {
-          const response = await getTransmissionBetweenCountries(timeRange);
+          const foreign = await getTransmissionBetweenCountries(timeRange);
 
-          if (Object.entries(response).length === 0) {
+          const domestic = await getDomesticTransmission(timeRange);
+          setDomesticTransmission(domestic);
+
+          if (Object.entries(foreign).length === 0) {
             return errorNotification('Failed to fetch transmission data');
           }
 
-          const values = mapResponseToCountryValues(response);
+          const values = mapResponseToCountryValues(foreign);
           const tableData = mapValuesToTableData(values);
 
           setTransmissionByCountries(tableData);
@@ -112,13 +137,6 @@ function Transmission() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeRange]);
-
-  const getTableRowCountry = (country: [string, CountryTableData]) => (
-    <td>{transmissionCountries[country[0] as keyof TransmissionBetweenCountriesValues]}</td>
-  );
-
-  const getTableRowCells = (country: [string, CountryTableData]) =>
-    Object.values(country[1]).map((num, index) => <td key={index}>{formatNumber(num)}</td>);
 
   return (
     <Container size={'lg'} p={0}>
@@ -163,8 +181,22 @@ function Transmission() {
             </tbody>
           </Table>
         </TitleCard>
-        <TitleCard title="Domestic">
-          <></>
+        <TitleCard
+          title="Domestic transmission"
+          description="Up means electricity moves from south to north. Down means north to south."
+        >
+          <CustomTooltip
+            title="Explanation"
+            label={
+              <List size={'sm'} sx={{ color: white }}>
+                <List.Item>Up means electricity moves from south to north.</List.Item>
+                <List.Item>Down means north to south.</List.Item>
+                <List.Item>Empty means data can&apos;t be found.</List.Item>
+              </List>
+            }
+          >
+            <DomesticTransmissionArrows direction={getDomesticDirection(domesticTransmission)} />
+          </CustomTooltip>
         </TitleCard>
       </SimpleGrid>
     </Container>

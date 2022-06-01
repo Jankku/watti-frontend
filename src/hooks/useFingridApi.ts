@@ -19,7 +19,7 @@ const getNetImportExport = async (timeRange: TimeRange) => await get(194, timeRa
 const getTotalConsumption = async (timeRange: TimeRange) => await get(124, timeRange);
 const getTotalConsumptionEmissions = async (timeRange: TimeRange) => await get(265, timeRange);
 
-const getProductionSurplusDeficit = async (timeRange: TimeRange) => await get(198, timeRange);
+const getProductionSurplus = async (timeRange: TimeRange) => await get(198, timeRange);
 const getTotalProduction = async (timeRange: TimeRange) => await get(74, timeRange);
 const getTotalProductionEmissions = async (timeRange: TimeRange) => await get(266, timeRange);
 const getTotalProductionByMethods = async (timeRange: TimeRange) => {
@@ -42,6 +42,7 @@ const getTotalProductionByMethods = async (timeRange: TimeRange) => {
 
 const getSystemState = async (timeRange: TimeRange) => await get(209, timeRange);
 
+const getDomesticTransmission = async (timeRange: TimeRange) => await get(30, timeRange);
 const getTransmissionBetweenCountries = async (timeRange: TimeRange) => {
   const responses = await Promise.all([
     get(61, timeRange), // Central Sweden
@@ -64,10 +65,12 @@ const getTransmissionBetweenCountries = async (timeRange: TimeRange) => {
 
 function useFingridApi() {
   return {
+    getDomesticTransmission,
     getTransmissionBetweenCountries,
     getTotalProduction,
     getTotalProductionByMethods,
     getTotalProductionEmissions,
+    getProductionSurplus,
     getTotalConsumption,
     getTotalConsumptionEmissions,
     getSystemState,
