@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Container, List, SimpleGrid, Table, Title, useMantineTheme } from '@mantine/core';
+import { Box, Container, List, SimpleGrid, Table, Title } from '@mantine/core';
 import TimeRange from '../model/TimeRange';
 import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
@@ -99,7 +99,6 @@ const getDomesticDirection = (data: FingridApiResponse[]): DomesticTransmissionD
 };
 
 function Transmission() {
-  const { white } = useMantineTheme();
   const { errorNotification } = useNotification();
   const { getTransmissionBetweenCountries, getDomesticTransmission } = useFingridApi();
   const { matchesXs } = useBreakpoint();
@@ -189,7 +188,7 @@ function Transmission() {
           <CustomTooltip
             title="Explanation"
             label={
-              <List size={'sm'} sx={{ color: white }}>
+              <List size={'sm'} sx={(theme) => ({ color: theme.other.tooltipTextColor })}>
                 <List.Item>Up means electricity moves from south to north.</List.Item>
                 <List.Item>Down means north to south.</List.Item>
                 <List.Item>Empty means data can&apos;t be found.</List.Item>

@@ -9,14 +9,20 @@ type TitleCardProps = {
 };
 
 function TitleCard({ title, description, bgColor, children }: TitleCardProps) {
-  const { colors, black } = useMantineTheme();
+  const { colors, colorScheme, other } = useMantineTheme();
+
+  const getCardColor = () => {
+    if (bgColor) return bgColor;
+    return colorScheme === 'dark' ? colors.dark[4] : colors.gray[0];
+  };
+
   return (
     <Card
       withBorder
       radius={'sm'}
       sx={{
-        backgroundColor: bgColor ?? colors.gray[0],
-        color: black,
+        backgroundColor: getCardColor(),
+        color: other.textColor,
       }}
     >
       <Box>

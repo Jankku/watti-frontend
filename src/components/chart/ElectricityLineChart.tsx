@@ -30,10 +30,11 @@ type ConsumptionChartProps = {
 };
 
 function ConsumptionChart({ data }: ConsumptionChartProps) {
-  const { colors } = useMantineTheme();
+  const { colors, colorScheme } = useMantineTheme();
   const { matchesXs } = useBreakpoint();
   const [labels, setLabels] = useState<ChartLabelArray>([]);
   const [values, setValues] = useState<number[]>([]);
+  const isDark = colorScheme === 'dark';
 
   useEffect(() => {
     if (!data) return;
@@ -53,18 +54,34 @@ function ConsumptionChart({ data }: ConsumptionChartProps) {
           {
             label: 'MWh/h',
             data: values,
-            borderColor: colors.yellow[8],
-            backgroundColor: colors.yellow[7],
+            borderColor: isDark ? colors.orange[4] : colors.yellow[8],
+            backgroundColor: isDark ? colors.orange[4] : colors.yellow[7],
           },
         ],
       }}
       options={{
         responsive: true,
+        line: {
+          datasets: {
+            borderColor: colors.dark[0],
+          },
+        },
         scales: {
           x: {
-            ticks: {},
+            ticks: {
+              color: isDark ? colors.dark[0] : colors.dark[9],
+            },
+            grid: {
+              color: isDark ? colors.dark[3] : colors.gray[3],
+            },
           },
           y: {
+            ticks: {
+              color: isDark ? colors.dark[0] : colors.dark[9],
+            },
+            grid: {
+              color: isDark ? colors.dark[3] : colors.gray[3],
+            },
             beginAtZero: true,
             suggestedMax: Math.max(...values) + 1000,
           },
@@ -73,6 +90,9 @@ function ConsumptionChart({ data }: ConsumptionChartProps) {
         plugins: {
           legend: {
             position: 'bottom' as const,
+            labels: {
+              color: isDark ? colors.dark[0] : colors.dark[9],
+            },
           },
           tooltip: {
             callbacks: {

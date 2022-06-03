@@ -1,4 +1,4 @@
-import { Box, ColorSwatch, Title, useMantineTheme } from '@mantine/core';
+import { Box, ColorSwatch, MediaQuery, Title, useMantineTheme } from '@mantine/core';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import useFingridApi from '../../hooks/useFingridApi';
@@ -49,7 +49,7 @@ const possibleStates: GridStateItem[] = [
 ];
 
 function GridState() {
-  const { colors } = useMantineTheme();
+  const { colors, other } = useMantineTheme();
   const { getSystemState } = useFingridApi();
   const [state, setState] = useState<GridStateItem>(possibleStates[5]);
 
@@ -69,15 +69,19 @@ function GridState() {
         console.error('Failed to get grid status');
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <CustomTooltip title="Grid status" label={state.description} width={150} position={'left'}>
+    <CustomTooltip title="Grid status" label={state.description} width={150}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <ColorSwatch key={state.color} color={colors[state.color][6]} size={20} />
-        <Title order={5} px={4}>
-          {state.name}
-        </Title>
+
+        <MediaQuery smallerThan={'sm'} styles={{ display: 'none' }}>
+          <Title order={5} px={4} color={other.headerTextColor}>
+            {state.name}
+          </Title>
+        </MediaQuery>
       </Box>
     </CustomTooltip>
   );

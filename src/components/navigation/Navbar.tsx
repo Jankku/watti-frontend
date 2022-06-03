@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from 'react';
 import Footer from '../common/Footer';
 
 const navIconSize = 16;
+
 export const navLinks: NavLinkProps[] = [
   {
     label: 'Home',

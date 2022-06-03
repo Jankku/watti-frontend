@@ -1,4 +1,4 @@
-import { Box, Paper, useMantineTheme } from '@mantine/core';
+import { Box, Card, useMantineTheme } from '@mantine/core';
 import { ArrowNarrowDown, ArrowNarrowUp } from 'tabler-icons-react';
 
 export type DomesticTransmissionDirections = 'north' | 'south' | null;
@@ -9,14 +9,13 @@ type DomesticTransmissionArrowsProps = {
 
 const getArrows = (leftColor: string, rightColor: string) => {
   return (
-    <Paper
+    <Card
       withBorder
       sx={{
         width: 'min-content',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '0.5em',
       }}
     >
       <Box
@@ -43,7 +42,7 @@ const getArrows = (leftColor: string, rightColor: string) => {
           <ArrowNarrowDown size={72} color={rightColor} />
         </Box>
       </Box>
-    </Paper>
+    </Card>
   );
 };
 

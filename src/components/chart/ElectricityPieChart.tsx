@@ -26,10 +26,14 @@ type ElectricityPieChartProps = {
 
 function ElectricityPieChart({ data }: ElectricityPieChartProps) {
   const chartRef = useRef(null);
-  const { colors, black, fontSizes } = useMantineTheme();
+  const { colors, colorScheme, black, fontSizes } = useMantineTheme();
   const { matchesXs } = useBreakpoint();
   const [labels, setLabels] = useState<ChartLabelArray>([]);
   const [values, setValues] = useState<number[]>([]);
+  const isDark = colorScheme === 'dark';
+
+  const chartColorsLight = [colors.red[5], colors.blue[5], colors.blue[2], colors.yellow[5]];
+  const chartColorsDark = [colors.red[3], colors.blue[3], colors.blue[0], colors.yellow[2]];
 
   useEffect(() => {
     if (!data) return;
@@ -50,7 +54,7 @@ function ElectricityPieChart({ data }: ElectricityPieChartProps) {
           {
             data: values,
             borderColor: colors.gray[6],
-            backgroundColor: [colors.red[5], colors.blue[5], colors.blue[2], colors.yellow[5]],
+            backgroundColor: isDark ? chartColorsDark : chartColorsLight,
           },
         ],
       }}

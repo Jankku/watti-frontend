@@ -4,19 +4,22 @@ import Home from './pages/Home';
 import Consumption from './pages/Consumption';
 import Production from './pages/Production';
 import Transmission from './pages/Transmission';
+import AppProviders from './AppProviders';
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/consumption" element={<Consumption />} />
-          <Route path="/production" element={<Production />} />
-          <Route path="/transmission" element={<Transmission />} />
-        </Route>
-      </Routes>
-    </div>
+    <AppProviders>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="/consumption" element={<Consumption />} />
+            <Route path="/production" element={<Production />} />
+            <Route path="/transmission" element={<Transmission />} />
+          </Route>
+        </Routes>
+      </div>
+    </AppProviders>
   );
 }
 

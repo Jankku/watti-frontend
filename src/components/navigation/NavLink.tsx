@@ -1,4 +1,12 @@
-import { Group, Text, ThemeIcon, UnstyledButton, useMantineTheme } from '@mantine/core';
+import {
+  Box,
+  CSSObject,
+  Group,
+  Text,
+  ThemeIcon,
+  UnstyledButton,
+  useMantineTheme,
+} from '@mantine/core';
 import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom';
 import useBreakpoint from '../../hooks/useBreakpoint';
 
@@ -11,17 +19,17 @@ export type NavLinkProps = {
 function NavLink({ label, path, icon }: NavLinkProps) {
   const navigate = useNavigate();
   const { matchesSm } = useBreakpoint();
-  const { spacing, radius, colors, black } = useMantineTheme();
+  const { spacing, radius, colors, colorScheme, white } = useMantineTheme();
   const resolved = useResolvedPath(path);
   const match = useMatch({ path: resolved.pathname, end: true });
+  const isDark = colorScheme === 'dark';
 
-  const baseStyle = {
+  const baseStyle: CSSObject = {
     display: 'block',
     width: '100%',
     padding: matchesSm ? spacing.md : spacing.xs,
     marginTop: spacing.xs,
     borderRadius: radius.sm,
-    color: black,
   };
 
   return (
@@ -31,19 +39,21 @@ function NavLink({ label, path, icon }: NavLinkProps) {
         match
           ? {
               ...baseStyle,
-              backgroundColor: colors.orange[1],
+              backgroundColor: isDark ? colors.dark[4] : colors.orange[2],
+              color: isDark ? colors.dark[0] : colors.dark[7],
             }
           : {
               ...baseStyle,
               '&:hover': {
-                backgroundColor: colors.orange[0],
+                backgroundColor: isDark ? colors.dark[4] : colors.orange[2],
+                color: isDark ? colors.dark[0] : colors.dark[7],
               },
             }
       }
     >
       <Group>
         <ThemeIcon color={'orange'} variant="filled">
-          {icon}
+          <Box sx={{ display: 'flex', color: isDark ? colors.dark[9] : white }}>{icon}</Box>
         </ThemeIcon>
 
         <Text size={`${matchesSm ? 'lg' : 'md'}`} weight={'bold'}>

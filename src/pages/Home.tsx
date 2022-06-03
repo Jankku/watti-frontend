@@ -4,19 +4,24 @@ import Branding from '../components/home/Branding';
 import useBreakpoint from '../hooks/useBreakpoint';
 
 function Home() {
-  const { colors, spacing } = useMantineTheme();
+  const { colors, colorScheme, spacing } = useMantineTheme();
   const { matchesXs } = useBreakpoint();
+
   return (
     <Container size={'sm'}>
       <Branding />
+
       <SimpleGrid cols={matchesXs ? 1 : 2} spacing={matchesXs ? spacing.xl : spacing.md}>
-        <TitleCard title="About" bgColor={colors.orange[1]}>
+        <TitleCard title="About" bgColor={colorScheme === 'dark' ? undefined : colors.orange[1]}>
           <Text size="md" pt={spacing.xs}>
             Track electricity production and consumption. Data is provided by Fingrid.
           </Text>
         </TitleCard>
 
-        <TitleCard title="Source code" bgColor={colors.orange[1]}>
+        <TitleCard
+          title="Source code"
+          bgColor={colorScheme === 'dark' ? undefined : colors.orange[1]}
+        >
           <Card.Section
             pt={spacing.xs}
             sx={{

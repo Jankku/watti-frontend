@@ -16,15 +16,24 @@ function Branding() {
     >
       <Image
         src={lightbulb}
-        width={matchesSm ? '8em' : undefined}
+        width={matchesSm ? '7em' : undefined}
         sx={{ transform: 'rotate(-30deg)' }}
       />
       <Box>
-        <Title order={1} align={'center'} sx={{ fontSize: '5em', textTransform: 'uppercase' }}>
+        <Title
+          order={1}
+          align={matchesSm ? 'center' : 'left'}
+          sx={{ fontSize: matchesSm ? '3em' : '5em', textTransform: 'uppercase' }}
+        >
           Watti
         </Title>
-        <Text weight={500} align={'center'} size={'lg'} sx={{ fontFamily: 'montserrat' }}>
-          Finnish electricity dashboard
+        <Text
+          weight={500}
+          align={'center'}
+          size={matchesSm ? 'lg' : 'xl'}
+          sx={{ fontFamily: 'montserrat' }}
+        >
+          Finnish Electricity Dashboard
         </Text>
       </Box>
     </Box>

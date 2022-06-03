@@ -7,7 +7,8 @@ function useNotification() {
       message,
       styles: (theme) => ({
         root: {
-          backgroundColor: theme.colors.red[7],
+          backgroundColor:
+            theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.red[7],
           color: theme.white,
           '&::before': { backgroundColor: theme.colors.red[9] },
         },
@@ -26,7 +27,8 @@ function useNotification() {
       message,
       styles: (theme) => ({
         root: {
-          backgroundColor: theme.colors.green[7],
+          backgroundColor:
+            theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.green[7],
           color: theme.white,
           '&::before': { backgroundColor: theme.colors.green[9] },
         },
