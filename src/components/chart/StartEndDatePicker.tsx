@@ -4,10 +4,11 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Box, useMantineTheme } from '@mantine/core';
 import useBreakpoint from '../../hooks/useBreakpoint';
-import { isToday } from '../../utils/timerangeutils';
+import isToday from 'dayjs/plugin/isToday';
 import { Calendar } from 'tabler-icons-react';
 
 dayjs.extend(localizedFormat);
+dayjs.extend(isToday);
 
 type StartEndDatePickerProps = {
   timeRange: TimeRange;
@@ -35,7 +36,7 @@ function StartEndDatePicker({ timeRange, changeTimeRange }: StartEndDatePickerPr
         inputFormat="L"
         maxDate={dayjs().endOf('day').toDate()}
         onChange={(tuple) => {
-          if (isToday(tuple[0])) {
+          if (dayjs(tuple[0]).isToday()) {
             const firstHourOfToday = dayjs().startOf('day').format();
             const currentHour = dayjs().format();
             changeTimeRange({
