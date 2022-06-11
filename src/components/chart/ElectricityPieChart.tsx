@@ -10,7 +10,7 @@ import {
   ChartLabelArray,
   createPieChartLabels,
   createPieChartValues,
-} from '../../utils/chartutils';
+} from '../../utils/electricity-chart-utils';
 import { useMantineTheme } from '@mantine/core';
 import ProductionByMethodResponse from '../../model/ProductionByMethodResponse';
 import { formatWatts } from '../../utils/wattutils';
@@ -39,9 +39,10 @@ function ElectricityPieChart({ data }: ElectricityPieChartProps) {
     if (!data) return;
 
     const values = createPieChartValues(data);
+    setValues(values);
+
     const labels = createPieChartLabels(data);
     setLabels(labels);
-    setValues(values);
   }, [data]);
 
   return (

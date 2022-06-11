@@ -9,27 +9,27 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import FingridApiResponse from '../../model/FingridApiResponse';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import { useEffect, useState } from 'react';
-import { ChartLabelArray, createLineChartLabels } from '../../utils/electricity-chart-utils';
+import { ChartLabelArray } from '../../utils/electricity-chart-utils';
 import { useMantineTheme } from '@mantine/core';
 import { formatNumber } from '../../utils/numberutils';
-import { mapApiResponseToValues } from '../../utils/responseutils';
+import PriceResponse from '../../model/PriceResponse';
+import { createPriceChartLabels, createPriceChartValues } from '../../utils/price-chart-utils';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(customParseFormat);
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-type ElectricityLineChartProps = {
-  data: FingridApiResponse[] | undefined;
+type PriceLineChartProps = {
+  data: PriceResponse[] | undefined;
 };
 
-function ElectricityLineChart({ data }: ElectricityLineChartProps) {
+function PriceLineChart({ data }: PriceLineChartProps) {
   const { colors, colorScheme } = useMantineTheme();
   const { matchesXs } = useBreakpoint();
   const [labels, setLabels] = useState<ChartLabelArray>([]);
@@ -39,11 +39,11 @@ function ElectricityLineChart({ data }: ElectricityLineChartProps) {
   useEffect(() => {
     if (!data) return;
 
-    const chartLabels = createLineChartLabels(data);
-    setLabels(chartLabels);
-
-    const chartValues = mapApiResponseToValues(data);
+    const chartValues = createPriceChartValues(data);
     setValues(chartValues);
+
+    const chartLabels = createPriceChartLabels(data);
+    setLabels(chartLabels);
   }, [data]);
 
   return (
@@ -53,7 +53,7 @@ function ElectricityLineChart({ data }: ElectricityLineChartProps) {
         labels: labels,
         datasets: [
           {
-            label: 'MWh/h',
+            label: 'cent/kWh',
             data: values,
             borderColor: isDark ? colors.orange[4] : colors.yellow[8],
             backgroundColor: isDark ? colors.orange[4] : colors.yellow[7],
@@ -84,7 +84,7 @@ function ElectricityLineChart({ data }: ElectricityLineChartProps) {
               color: isDark ? colors.dark[3] : colors.gray[3],
             },
             beginAtZero: true,
-            suggestedMax: Math.max(...values) + 1000,
+            suggestedMax: Math.max(...values) + 5,
           },
         },
         aspectRatio: matchesXs ? 1 : 2.5,
@@ -97,8 +97,8 @@ function ElectricityLineChart({ data }: ElectricityLineChartProps) {
           },
           tooltip: {
             callbacks: {
-              label: (context) => `${formatNumber(context.raw as number)}`,
-              afterLabel: () => 'Mwh/h',
+              label: (context) => `${formatNumber(context.raw as number, 2)}`,
+              afterLabel: () => 'cent/kWh',
             },
           },
         },
@@ -107,4 +107,4 @@ function ElectricityLineChart({ data }: ElectricityLineChartProps) {
   );
 }
 
-export default ElectricityLineChart;
+export default PriceLineChart;

@@ -5,6 +5,7 @@ import Consumption from './pages/Consumption';
 import Production from './pages/Production';
 import Transmission from './pages/Transmission';
 import AppProviders from './AppProviders';
+import Price from './pages/Price';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/consumption" element={<Consumption />} />
             <Route path="/production" element={<Production />} />
             <Route path="/transmission" element={<Transmission />} />
+            <Route path="/price" element={<Price />} />
           </Route>
         </Routes>
       </div>

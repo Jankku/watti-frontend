@@ -15,7 +15,7 @@ type DateLabel = string;
 export type ChartLabelArray = Array<DateLabel | DateTimeLabel>;
 
 function createLineChartLabels(data: FingridApiResponse[]): ChartLabelArray {
-  const labelType = getLineChartLabels(data);
+  const labelType = getLineChartLabelType(data);
   return labelType === 'date' ? createDateLabels(data) : createDateTimeLabels(data);
 }
 
@@ -45,7 +45,7 @@ function createDateTimeLabels(data: FingridApiResponse[]): ChartLabelArray {
 
 type ChartLabelType = 'date' | 'dateTime';
 
-function getLineChartLabels(data: FingridApiResponse[]): ChartLabelType {
+function getLineChartLabelType(data: FingridApiResponse[]): ChartLabelType {
   const startTimeUnix = data.map(({ start_time }) => dayjs(start_time).unix());
   const endTimeUnix = data.map(({ end_time }) => dayjs(end_time).unix());
   const earliestDate = dayjs(Math.min(...startTimeUnix), 'X');
@@ -66,7 +66,7 @@ type ProductionByMethodConverted = {
   solar: number[];
 };
 
-const createPieChartValues = (data: ProductionByMethodResponse): number[] => {
+function createPieChartValues(data: ProductionByMethodResponse): number[] {
   const results: ProductionByMethodConverted = {
     nuclear: [],
     hydro: [],
@@ -81,11 +81,11 @@ const createPieChartValues = (data: ProductionByMethodResponse): number[] => {
   }
 
   const flattenedResults = Object.values(results).flatMap((value) => value);
-
   return flattenedResults;
-};
+}
 
-const createPieChartLabels = (data: ProductionByMethodResponse) =>
-  Object.keys(data).map((label) => label.charAt(0).toUpperCase() + label.slice(1));
+function createPieChartLabels(data: ProductionByMethodResponse): string[] {
+  return Object.keys(data).map((label) => label.charAt(0).toUpperCase() + label.slice(1));
+}
 
 export { createLineChartLabels, createPieChartValues, createPieChartLabels };

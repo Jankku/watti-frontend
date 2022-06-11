@@ -14,8 +14,6 @@ const get = async (variableId: number, timeRange: TimeRange) => {
   return data;
 };
 
-const getNetImportExport = async (timeRange: TimeRange) => await get(194, timeRange);
-
 const getTotalConsumption = async (timeRange: TimeRange) => await get(124, timeRange);
 const getTotalConsumptionEmissions = async (timeRange: TimeRange) => await get(265, timeRange);
 

@@ -23,35 +23,33 @@ function StartEndDatePicker({ timeRange, changeTimeRange }: StartEndDatePickerPr
   const timeRangeTuple: [Date, Date] = [startDate, endDate];
 
   return (
-    <Box>
-      <DateRangePicker
-        required
-        clearable={false}
-        icon={<Calendar color={colors.orange[5]} />}
-        dropdownType={matchesMd ? 'modal' : 'popover'}
-        label="Start - End"
-        placeholder="Pick date"
-        value={timeRangeTuple}
-        range={timeRangeTuple}
-        inputFormat="L"
-        maxDate={dayjs().endOf('day').toDate()}
-        onChange={(tuple) => {
-          if (dayjs(tuple[0]).isToday()) {
-            const firstHourOfToday = dayjs().startOf('day').format();
-            const currentHour = dayjs().format();
-            changeTimeRange({
-              start_time: firstHourOfToday,
-              end_time: currentHour,
-            });
-          } else {
-            changeTimeRange({
-              start_time: dayjs(tuple[0]).format(),
-              end_time: dayjs(tuple[1]).format(),
-            });
-          }
-        }}
-      />
-    </Box>
+    <DateRangePicker
+      required
+      clearable={false}
+      icon={<Calendar color={colors.orange[5]} />}
+      dropdownType={matchesMd ? 'modal' : 'popover'}
+      label="Start - End"
+      placeholder="Pick date"
+      value={timeRangeTuple}
+      range={timeRangeTuple}
+      inputFormat="L"
+      maxDate={dayjs().endOf('day').toDate()}
+      onChange={(tuple) => {
+        if (dayjs(tuple[0]).isToday()) {
+          const firstHourOfToday = dayjs().startOf('day').format();
+          const currentHour = dayjs().format();
+          changeTimeRange({
+            start_time: firstHourOfToday,
+            end_time: currentHour,
+          });
+        } else {
+          changeTimeRange({
+            start_time: dayjs(tuple[0]).format(),
+            end_time: dayjs(tuple[1]).format(),
+          });
+        }
+      }}
+    />
   );
 }
 
