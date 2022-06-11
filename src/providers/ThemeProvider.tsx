@@ -54,6 +54,11 @@ function ThemeProvider({ children }: ThemeProviderProps) {
               color: theme.other.buttonTextColor,
             },
           }),
+          DateRangePicker: (theme) => ({
+            dropdown: {
+              backgroundColor: isDark ? theme.colors.dark[5] : theme.white,
+            },
+          }),
         }}
       >
         {children}
