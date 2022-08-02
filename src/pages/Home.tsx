@@ -1,4 +1,4 @@
-import { Anchor, Button, Card, Container, SimpleGrid, Text, useMantineTheme } from '@mantine/core';
+import { Anchor, Box, Button, Container, SimpleGrid, Text, useMantineTheme } from '@mantine/core';
 import TitleCard from '../components/common/TitleCard';
 import Branding from '../components/home/Branding';
 import useBreakpoint from '../hooks/useBreakpoint';
@@ -22,7 +22,7 @@ function Home() {
           title="Source code"
           bgColor={colorScheme === 'dark' ? undefined : colors.orange[1]}
         >
-          <Card.Section
+          <Box
             pt={spacing.xs}
             sx={{
               display: 'flex',
@@ -40,7 +40,7 @@ function Home() {
                 Frontend
               </Button>
             </Anchor>
-          </Card.Section>
+          </Box>
         </TitleCard>
       </SimpleGrid>
     </Container>

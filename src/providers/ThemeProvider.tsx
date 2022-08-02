@@ -20,47 +20,7 @@ function ThemeProvider({ children }: ThemeProviderProps) {
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider
-        withNormalizeCSS
-        withCSSVariables
-        theme={isDark ? themeDark : themeLight}
-        styles={{
-          Header: (theme) => ({
-            root: {
-              backgroundColor: isDark ? theme.colors.dark[5] : theme.colors.yellow[7],
-            },
-          }),
-          Drawer: (theme) => ({
-            drawer: {
-              backgroundColor: isDark ? theme.colors.dark[6] : theme.white,
-            },
-          }),
-          Navbar: (theme) => ({
-            root: {
-              backgroundColor: isDark ? theme.colors.dark[6] : theme.white,
-            },
-          }),
-          Tooltip: (theme) => ({
-            body: {
-              backgroundColor: theme.colors.dark[7],
-              color: theme.white,
-            },
-            arrow: {
-              backgroundColor: theme.colors.dark[7],
-            },
-          }),
-          Button: (theme) => ({
-            root: {
-              color: theme.other.buttonTextColor,
-            },
-          }),
-          DateRangePicker: (theme) => ({
-            dropdown: {
-              backgroundColor: isDark ? theme.colors.dark[5] : theme.white,
-            },
-          }),
-        }}
-      >
+      <MantineProvider withNormalizeCSS withCSSVariables theme={isDark ? themeDark : themeLight}>
         {children}
       </MantineProvider>
     </ColorSchemeProvider>

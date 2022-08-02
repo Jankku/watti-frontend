@@ -20,6 +20,7 @@ function TitleCard({ title, description, bgColor, children }: TitleCardProps) {
     <Card
       withBorder
       radius={'sm'}
+      p={'md'}
       sx={{
         backgroundColor: getCardColor(),
         color: other.textColor,
@@ -28,7 +29,7 @@ function TitleCard({ title, description, bgColor, children }: TitleCardProps) {
       <Box>
         <Title order={4}>{title}</Title>
         {description ? <Text mb={'md'}>{description}</Text> : null}
-        <Card.Section>{children}</Card.Section>
+        {children}
       </Box>
     </Card>
   );

@@ -2,7 +2,7 @@ import { DateRangePicker } from '@mantine/dates';
 import TimeRange from '../../model/TimeRange';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { Box, useMantineTheme } from '@mantine/core';
+import { useMantineTheme } from '@mantine/core';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import isToday from 'dayjs/plugin/isToday';
 import { Calendar } from 'tabler-icons-react';

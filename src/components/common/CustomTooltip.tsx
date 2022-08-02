@@ -26,7 +26,7 @@ function CustomTooltip({ children, title, label, ...rest }: GridstateTooltipProp
   );
 
   return (
-    <Tooltip withArrow wrapLines label={toolTipContent} closeDelay={matchesXs ? 2000 : 0} {...rest}>
+    <Tooltip withArrow label={toolTipContent} closeDelay={matchesXs ? 2000 : 0} {...rest}>
       {children}
     </Tooltip>
   );
