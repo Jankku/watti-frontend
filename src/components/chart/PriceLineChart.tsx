@@ -53,7 +53,7 @@ function PriceLineChart({ data }: PriceLineChartProps) {
         labels: labels,
         datasets: [
           {
-            label: 'cent/kWh',
+            label: 'cents/kWh',
             data: values,
             borderColor: isDark ? colors.orange[4] : colors.yellow[8],
             backgroundColor: isDark ? colors.orange[4] : colors.yellow[7],
@@ -98,7 +98,7 @@ function PriceLineChart({ data }: PriceLineChartProps) {
           tooltip: {
             callbacks: {
               label: (context) => `${formatNumber(context.raw as number, 2)}`,
-              afterLabel: () => 'cent/kWh',
+              afterLabel: () => 'cents/kWh',
             },
           },
         },
