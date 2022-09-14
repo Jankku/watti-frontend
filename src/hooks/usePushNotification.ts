@@ -21,7 +21,7 @@ function usePushNotification() {
     await navigator.serviceWorker.register('../../service-worker.js');
 
   const getPublicKey = async () => {
-    const { data } = await axios.get<PublicKeyResponse>('/api/subscription-key/');
+    const { data } = await axios.get<PublicKeyResponse>('/api/subscription/key');
     return data.vapidPublicKey;
   };
 
