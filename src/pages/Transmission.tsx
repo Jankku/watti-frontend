@@ -157,7 +157,7 @@ function Transmission() {
       <SimpleGrid cols={matchesXs ? 1 : 2}>
         <TitleCard
           title="Import/Export"
-          description="Positive value means exporting to another country. Negative value means importing to Finland."
+          description="Positive (+) value means export. Negative (-) value means import."
         >
           <Table highlightOnHover captionSide="bottom">
             <caption>MWh/h</caption>
