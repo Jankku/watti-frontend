@@ -8,3 +8,6 @@ Watti
 <h4>Electricity dashboard for Finland</h4>
 <h4>You can find backend code <a href="https://github.com/jankku/watti-backend/">here</a>.</h4>
 </div>
+
+## License
+Licensed under the [MIT License](https://github.com/Jankku/watti-frontend/blob/master/LICENSE.md).
