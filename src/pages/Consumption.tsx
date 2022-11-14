@@ -1,61 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, Container, Title } from '@mantine/core';
-import FingridApiResponse from '../model/FingridApiResponse';
 import TimeRange from '../model/TimeRange';
 import ElectricityLineChart from '../components/chart/ElectricityLineChart';
 import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
-import useFingridApi from '../hooks/useFingridApi';
-import DefaultTimeRange from '../model/DefaultTimeRange';
-import { isValidTimeRange } from '../utils/timerangeutils';
+import defaultTimeRange from '../model/DefaultTimeRange';
 import StatsGroup from '../components/stats/StatsGroup';
 import PushNotificationHandler from '../components/pushnotification/PushNotificationHandler';
 import ChartCard from '../components/chart/ChartCard';
+import { getTotalConsumption, getTotalConsumptionEmissions } from '../data/fingridApi';
+import { useQuery } from '@tanstack/react-query';
 
 function Consumption() {
   const { errorNotification } = useNotification();
-  const { getTotalConsumption, getTotalConsumptionEmissions } = useFingridApi();
-  const [emissions, setEmissions] = useState<FingridApiResponse[]>([]);
-  const [consumption, setConsumption] = useState<FingridApiResponse[]>([]);
-  const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
+  const [dateRange, setTimeRange] = useState<TimeRange>(defaultTimeRange);
 
-  useEffect(() => {
-    (async () => {
-      if (isValidTimeRange(timeRange)) {
-        try {
-          const consumption = await getTotalConsumption(timeRange);
+  const emissionQuery = useQuery(
+    ['consumption', 'emission', dateRange],
+    () => getTotalConsumptionEmissions(dateRange),
+    {
+      onError: () => errorNotification('Failed to fetch emission data'),
+    }
+  );
 
-          if (consumption.length === 0) {
-            return errorNotification('Failed to fetch graph data');
-          }
-
-          setConsumption(consumption);
-        } catch (error) {
-          errorNotification('Failed to fetch graph data');
-        }
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeRange]);
-
-  useEffect(() => {
-    (async () => {
-      if (isValidTimeRange(timeRange)) {
-        try {
-          const consumptionEmissions = await getTotalConsumptionEmissions(timeRange);
-
-          if (consumptionEmissions.length === 0) {
-            return errorNotification('Failed to fetch emission data');
-          }
-
-          setEmissions(consumptionEmissions);
-        } catch (error) {
-          errorNotification('Failed to fetch emission data');
-        }
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeRange]);
+  const consumptionQuery = useQuery(
+    ['consumption', dateRange],
+    () => getTotalConsumption(dateRange),
+    {
+      onError: () => errorNotification('Failed to fetch graph data'),
+    }
+  );
 
   return (
     <Container size={'lg'} p={0}>
@@ -72,11 +46,13 @@ function Consumption() {
         }}
       >
         <PushNotificationHandler />
-        <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
+        <StartEndDatePicker dateRange={dateRange} changeTimeRange={setTimeRange} />
       </Box>
-      <StatsGroup data={consumption} emissions={emissions} />
+
+      <StatsGroup data={consumptionQuery.data} emissions={emissionQuery.data} />
+
       <ChartCard title="Total consumption">
-        <ElectricityLineChart data={consumption} />
+        <ElectricityLineChart data={consumptionQuery.data} />
       </ChartCard>
     </Container>
   );

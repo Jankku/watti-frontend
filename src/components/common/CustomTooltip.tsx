@@ -2,12 +2,12 @@ import { ReactNode } from 'react';
 import { Box, Title, Tooltip, TooltipProps, useMantineTheme } from '@mantine/core';
 import useBreakpoint from '../../hooks/useBreakpoint';
 
-interface GridstateTooltipProps extends TooltipProps {
+interface CustomTooltipProps extends TooltipProps {
   title: string;
   description?: string | ReactNode;
 }
 
-function CustomTooltip({ children, title, label, ...rest }: GridstateTooltipProps) {
+function CustomTooltip({ children, title, label, ...rest }: CustomTooltipProps) {
   const { spacing } = useMantineTheme();
   const { matchesXs } = useBreakpoint();
 
@@ -26,7 +26,14 @@ function CustomTooltip({ children, title, label, ...rest }: GridstateTooltipProp
   );
 
   return (
-    <Tooltip withArrow label={toolTipContent} closeDelay={matchesXs ? 2000 : 0} {...rest}>
+    <Tooltip
+      withArrow
+      multiline
+      position="bottom-start"
+      label={toolTipContent}
+      closeDelay={matchesXs ? 2000 : 0}
+      {...rest}
+    >
       {children}
     </Tooltip>
   );

@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, Container, List, SimpleGrid, Table, Title } from '@mantine/core';
 import TimeRange from '../model/TimeRange';
 import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
-import useFingridApi from '../hooks/useFingridApi';
-import DefaultTimeRange from '../model/DefaultTimeRange';
-import { isValidTimeRange } from '../utils/timerangeutils';
+import defaultTimeRange from '../model/DefaultTimeRange';
 import TransmissionBetweenCountriesResponse from '../model/TransmissionBetweenCountriesResponse';
 import TitleCard from '../components/common/TitleCard';
 import { calcAverage, calcMax, calcMin, formatNumber } from '../utils/numberutils';
@@ -13,9 +11,11 @@ import useBreakpoint from '../hooks/useBreakpoint';
 import FingridApiResponse from '../model/FingridApiResponse';
 import CustomTooltip from '../components/common/CustomTooltip';
 import DomesticTransmissionArrows, {
-  DomesticTransmissionDirections,
+  DomesticTransmissionDirection,
 } from '../components/transmission/DomesticTransmissionArrows';
 import { mapApiResponseToValues } from '../utils/responseutils';
+import { getTransmissionBetweenCountries, getDomesticTransmission } from '../data/fingridApi';
+import { useQuery } from '@tanstack/react-query';
 
 const transmissionCountries = {
   centralSweden: 'Central Sweden',
@@ -47,7 +47,7 @@ type TransmissionBetweenCountriesTableData = {
   russia: CountryTableData;
 };
 
-const mapResponseToCountryValues = (response: TransmissionBetweenCountriesResponse) => {
+export const mapResponseToCountryValues = (response: TransmissionBetweenCountriesResponse) => {
   const countryValues: TransmissionBetweenCountriesValues = {
     centralSweden: [],
     northernSweden: [],
@@ -64,7 +64,7 @@ const mapResponseToCountryValues = (response: TransmissionBetweenCountriesRespon
   return countryValues;
 };
 
-const mapValuesToTableData = (values: TransmissionBetweenCountriesValues) => {
+export const mapValuesToTableData = (values: TransmissionBetweenCountriesValues) => {
   const tableData: TransmissionBetweenCountriesTableData = {
     centralSweden: { min: 0, average: 0, max: 0 },
     northernSweden: { min: 0, average: 0, max: 0 },
@@ -90,53 +90,43 @@ const getTableRowCountry = (country: [string, CountryTableData]) => (
 const getTableRowCells = (country: [string, CountryTableData]) =>
   Object.values(country[1]).map((num, index) => <td key={index}>{formatNumber(num)}</td>);
 
-const getDomesticDirection = (data: FingridApiResponse[]): DomesticTransmissionDirections => {
-  if (data.length === 0) return null;
+const getDomesticDirection = (data?: FingridApiResponse[]): DomesticTransmissionDirection => {
+  if (data === undefined) return null;
 
   const values = mapApiResponseToValues(data);
   const average = calcAverage(values);
   return average > 0 ? 'south' : 'north';
 };
 
+export const transmissionBetweenCountriesInitial: TransmissionBetweenCountriesTableData = {
+  centralSweden: { min: 0, average: 0, max: 0 },
+  northernSweden: { min: 0, average: 0, max: 0 },
+  norway: { min: 0, average: 0, max: 0 },
+  estonia: { min: 0, average: 0, max: 0 },
+  russia: { min: 0, average: 0, max: 0 },
+};
+
 function Transmission() {
   const { errorNotification } = useNotification();
-  const { getTransmissionBetweenCountries, getDomesticTransmission } = useFingridApi();
   const { matchesXs } = useBreakpoint();
-  const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
-  const [domesticTransmission, setDomesticTransmission] = useState<FingridApiResponse[]>([]);
-  const [transmissionByCountries, setTransmissionByCountries] =
-    useState<TransmissionBetweenCountriesTableData>({
-      centralSweden: { min: 0, average: 0, max: 0 },
-      northernSweden: { min: 0, average: 0, max: 0 },
-      norway: { min: 0, average: 0, max: 0 },
-      estonia: { min: 0, average: 0, max: 0 },
-      russia: { min: 0, average: 0, max: 0 },
-    });
+  const [dateRange, setTimeRange] = useState<TimeRange>(defaultTimeRange);
 
-  useEffect(() => {
-    (async () => {
-      if (isValidTimeRange(timeRange)) {
-        try {
-          const foreign = await getTransmissionBetweenCountries(timeRange);
+  const domesticTransmissionQuery = useQuery(
+    ['transmission', 'domestic', dateRange],
+    () => getDomesticTransmission(dateRange),
+    {
+      onError: () => errorNotification('Failed to fetch transmission data'),
+    }
+  );
 
-          const domestic = await getDomesticTransmission(timeRange);
-          setDomesticTransmission(domestic);
-
-          if (Object.entries(foreign).length === 0) {
-            return errorNotification('Failed to fetch transmission data');
-          }
-
-          const values = mapResponseToCountryValues(foreign);
-          const tableData = mapValuesToTableData(values);
-
-          setTransmissionByCountries(tableData);
-        } catch (error) {
-          errorNotification('Failed to fetch transmission data');
-        }
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeRange]);
+  const transmissionBetweenCountriesQuery = useQuery(
+    ['transmission', 'betweenCountries', dateRange],
+    () => getTransmissionBetweenCountries(dateRange),
+    {
+      placeholderData: transmissionBetweenCountriesInitial,
+      onError: () => errorNotification('Failed to fetch transmission data'),
+    }
+  );
 
   return (
     <Container size={'lg'} p={0}>
@@ -152,7 +142,7 @@ function Transmission() {
           paddingBottom: '2em',
         }}
       >
-        <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
+        <StartEndDatePicker dateRange={dateRange} changeTimeRange={setTimeRange} />
       </Box>
       <SimpleGrid cols={matchesXs ? 1 : 2}>
         <TitleCard
@@ -170,14 +160,16 @@ function Transmission() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(transmissionByCountries).map((country, index) => {
-                return (
-                  <tr key={index}>
-                    {getTableRowCountry(country)}
-                    {getTableRowCells(country)}
-                  </tr>
-                );
-              })}
+              {transmissionBetweenCountriesQuery?.data
+                ? Object.entries(transmissionBetweenCountriesQuery.data).map((country, index) => {
+                    return (
+                      <tr key={index}>
+                        {getTableRowCountry(country)}
+                        {getTableRowCells(country)}
+                      </tr>
+                    );
+                  })
+                : null}
             </tbody>
           </Table>
         </TitleCard>
@@ -195,7 +187,9 @@ function Transmission() {
               </List>
             }
           >
-            <DomesticTransmissionArrows direction={getDomesticDirection(domesticTransmission)} />
+            <DomesticTransmissionArrows
+              direction={getDomesticDirection(domesticTransmissionQuery.data)}
+            />
           </CustomTooltip>
         </TitleCard>
       </SimpleGrid>

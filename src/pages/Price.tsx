@@ -1,45 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, Container, Title } from '@mantine/core';
 import TimeRange from '../model/TimeRange';
 import StartEndDatePicker from '../components/chart/StartEndDatePicker';
 import useNotification from '../hooks/useNotification';
-import DefaultTimeRange from '../model/DefaultTimeRange';
-import { isValidTimeRange } from '../utils/timerangeutils';
+import defaultTimeRange from '../model/DefaultTimeRange';
 import PushNotificationHandler from '../components/pushnotification/PushNotificationHandler';
-import useVattenfallApi from '../hooks/useVattenfallApi';
-import PriceResponse from '../model/PriceResponse';
+import { getPrice } from '../data/vattenfallApi';
 import PriceLineChart from '../components/chart/PriceLineChart';
 import ChartCard from '../components/chart/ChartCard';
+import { useQuery } from '@tanstack/react-query';
 
 function Price() {
   const { errorNotification } = useNotification();
-  const { getPrice } = useVattenfallApi();
-  const [prices, setPrices] = useState<PriceResponse[]>([]);
-  const [timeRange, setTimeRange] = useState<TimeRange>(DefaultTimeRange);
+  const [dateRange, setTimeRange] = useState<TimeRange>(defaultTimeRange);
 
-  useEffect(() => {
-    (async () => {
-      if (isValidTimeRange(timeRange)) {
-        try {
-          const prices = await getPrice(timeRange);
-
-          if (prices.length === 0) {
-            return errorNotification('Failed to fetch price data');
-          }
-
-          setPrices(prices);
-        } catch (error) {
-          errorNotification('Failed to fetch price data');
-        }
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeRange]);
+  const { data } = useQuery(['price', dateRange], () => getPrice(dateRange), {
+    onError: () => errorNotification('Failed to fetch price data'),
+  });
 
   return (
     <Container size={'lg'} p={0}>
       <Title align="center" order={1}>
-        Electricity Price (spot)
+        Electricity Price
       </Title>
       <Box
         sx={{
@@ -50,11 +32,11 @@ function Price() {
         }}
       >
         <PushNotificationHandler />
-        <StartEndDatePicker timeRange={timeRange} changeTimeRange={setTimeRange} />
+        <StartEndDatePicker dateRange={dateRange} changeTimeRange={setTimeRange} />
       </Box>
 
-      <ChartCard title="Price in the given time range">
-        <PriceLineChart data={prices} />
+      <ChartCard title="">
+        <PriceLineChart data={data} />
       </ChartCard>
     </Container>
   );

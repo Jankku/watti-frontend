@@ -1,10 +1,10 @@
 import { Box, Card, useMantineTheme } from '@mantine/core';
 import { ArrowNarrowDown, ArrowNarrowUp } from 'tabler-icons-react';
 
-export type DomesticTransmissionDirections = 'north' | 'south' | null;
+export type DomesticTransmissionDirection = 'north' | 'south' | null;
 
 type DomesticTransmissionArrowsProps = {
-  direction: DomesticTransmissionDirections;
+  direction: DomesticTransmissionDirection;
 };
 
 const getArrows = (leftColor: string, rightColor: string) => {
@@ -54,10 +54,10 @@ function DomesticTransmissionArrows({ direction }: DomesticTransmissionArrowsPro
     return getArrows(colors.gray[4], colors.gray[4]);
   }
 
-  return getArrows(
-    isNorth ? colors.green[6] : colors.gray[4],
-    isNorth ? colors.gray[4] : colors.green[6]
-  );
+  const topArrow = isNorth ? colors.green[6] : colors.gray[4];
+  const bottomArrow = isNorth ? colors.gray[4] : colors.green[6];
+
+  return getArrows(topArrow, bottomArrow);
 }
 
 export default DomesticTransmissionArrows;

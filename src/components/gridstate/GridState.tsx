@@ -1,12 +1,12 @@
 import { Box, ColorSwatch, MediaQuery, Title, useMantineTheme } from '@mantine/core';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-import useFingridApi from '../../hooks/useFingridApi';
 import GridStateItem from '../../model/GridStateItem';
 import TimeRange from '../../model/TimeRange';
 import CustomTooltip from '../common/CustomTooltip';
+import { getGridState } from '../../data/fingridApi';
+import { useQuery } from '@tanstack/react-query';
 
-const possibleStates: GridStateItem[] = [
+export const gridStates: GridStateItem[] = [
   {
     id: 1,
     name: 'Normal',
@@ -48,38 +48,27 @@ const possibleStates: GridStateItem[] = [
   },
 ];
 
+const dateRange: TimeRange = {
+  start_time: dayjs().startOf('hour').format(),
+  end_time: dayjs().endOf('hour').format(),
+};
+
 function GridState() {
   const { colors, other } = useMantineTheme();
-  const { getSystemState } = useFingridApi();
-  const [state, setState] = useState<GridStateItem>(possibleStates[5]);
+  const { data } = useQuery(['gridState', dateRange], () => getGridState(dateRange), {
+    placeholderData: gridStates[5],
+  });
 
-  const timeRange: TimeRange = {
-    start_time: dayjs().startOf('hour').format(),
-    end_time: dayjs().endOf('hour').format(),
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await getSystemState(timeRange);
-        const latestItemId = res.at(-1)?.value;
-        const currentState = possibleStates.find((item) => item.id === latestItemId);
-        currentState && setState(currentState);
-      } catch {
-        console.error('Failed to get grid status');
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const color = data?.color ? colors[data.color][6] : colors['gray'][6];
 
   return (
-    <CustomTooltip title="Grid status" label={state.description} width={150}>
+    <CustomTooltip title="Grid status" label={data?.description} width={120}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <ColorSwatch key={state.color} color={colors[state.color][6]} size={20} />
+        <ColorSwatch key={data?.color} color={color} size={20} />
 
         <MediaQuery smallerThan={'sm'} styles={{ display: 'none' }}>
           <Title order={5} px={4} color={other.headerTextColor}>
-            {state.name}
+            {data?.name}
           </Title>
         </MediaQuery>
       </Box>
