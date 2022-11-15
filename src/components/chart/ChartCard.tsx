@@ -15,7 +15,7 @@ function ChartCard({ title, children }: ChartCardProps) {
         py="xl"
         my="xl"
         sx={{
-          backgroundColor: colorScheme === 'dark' ? colors.dark[4] : colors.gray[0],
+          backgroundColor: colorScheme === 'dark' ? colors.dark[5] : colors.gray[0],
           color: other.textColor,
         }}
       >

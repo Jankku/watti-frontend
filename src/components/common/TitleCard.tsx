@@ -13,7 +13,7 @@ function TitleCard({ title, description, bgColor, children }: TitleCardProps) {
 
   const getCardColor = () => {
     if (bgColor) return bgColor;
-    return colorScheme === 'dark' ? colors.dark[4] : colors.gray[0];
+    return colorScheme === 'dark' ? colors.dark[5] : colors.gray[0];
   };
 
   return (
