@@ -9,10 +9,10 @@ const themeDark: MantineThemeOverride = {
     fontFamily: 'montserrat, sans-serif',
   },
   other: {
-    textColor: '#FFF',
+    textColor: '#eee',
     buttonTextColor: '#000',
-    headerTextColor: '#FFF',
-    tooltipTextColor: '#FFF',
+    headerTextColor: '#fff',
+    tooltipTextColor: '#fff',
   },
   components: {
     Header: {

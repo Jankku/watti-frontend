@@ -30,7 +30,7 @@ type PriceLineChartProps = {
 };
 
 function PriceLineChart({ data }: PriceLineChartProps) {
-  const { colors, colorScheme } = useMantineTheme();
+  const { colors, other, colorScheme } = useMantineTheme();
   const { matchesXs } = useBreakpoint();
   const [labels, setLabels] = useState<ChartLabelArray>([]);
   const [values, setValues] = useState<number[]>([]);
@@ -70,7 +70,7 @@ function PriceLineChart({ data }: PriceLineChartProps) {
         scales: {
           x: {
             ticks: {
-              color: isDark ? colors.dark[0] : colors.dark[9],
+              color: other.textColor,
             },
             grid: {
               color: isDark ? colors.dark[3] : colors.gray[3],
@@ -78,7 +78,7 @@ function PriceLineChart({ data }: PriceLineChartProps) {
           },
           y: {
             ticks: {
-              color: isDark ? colors.dark[0] : colors.dark[9],
+              color: other.textColor,
             },
             grid: {
               color: isDark ? colors.dark[3] : colors.gray[3],
@@ -92,7 +92,7 @@ function PriceLineChart({ data }: PriceLineChartProps) {
           legend: {
             position: 'bottom' as const,
             labels: {
-              color: isDark ? colors.dark[0] : colors.dark[9],
+              color: other.textColor,
             },
           },
           tooltip: {

@@ -26,7 +26,7 @@ type ElectricityPieChartProps = {
 
 function ElectricityPieChart({ data }: ElectricityPieChartProps) {
   const chartRef = useRef(null);
-  const { colors, colorScheme, black, fontSizes } = useMantineTheme();
+  const { colors, colorScheme, black, other, fontSizes } = useMantineTheme();
   const { matchesXs } = useBreakpoint();
   const [labels, setLabels] = useState<ChartLabelArray>([]);
   const [values, setValues] = useState<number[]>([]);
@@ -54,7 +54,7 @@ function ElectricityPieChart({ data }: ElectricityPieChartProps) {
         datasets: [
           {
             data: values,
-            borderColor: colors.gray[6],
+            borderColor: isDark ? colors.gray[5] : colors.gray[6],
             backgroundColor: isDark ? chartColorsDark : chartColorsLight,
           },
         ],
@@ -64,6 +64,9 @@ function ElectricityPieChart({ data }: ElectricityPieChartProps) {
         aspectRatio: matchesXs ? 1 : 2,
         plugins: {
           legend: {
+            labels: {
+              color: other.textColor,
+            },
             position: 'bottom' as const,
           },
           tooltip: {
